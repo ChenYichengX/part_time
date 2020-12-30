@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chen.part_time.dao.ITypeDao">
+
+    <!--    boolean saveType(Type type);-->
+    <insert id="saveType">
+        insert into t_type(name) values(#{name})
+    </insert>
+    <!--    Type getType(Long id);-->
+    <select id="getType" resultType="com.chen.part_time.entity.Type">
+        select * from t_type where id = #{id}
+    </select>
+    <!--    List<Type> getAllType();-->
+    <select id="getAllType" resultType="com.chen.part_time.vo.TypeVo">
+        SELECT t.*,COUNT(type_id) size FROM t_type t
+            LEFT JOIN t_part_time p ON t.id = p.`type_id`
+        GROUP BY t.id
+        ORDER BY COUNT(type_id) DESC
+    </select>
+    <!--    boolean updateType(Type type);-->
+    <update id="updateType">
+        update t_type set name = #{name} where id = #{id}
+    </update>
+    <!--    boolean deleteType(Long id);-->
+    <delete id="deleteType">
+        delete from t_type where id = #{id}
+    </delete>
+    <!--    Type getTypeByName(String name);-->
+    <select id="getTypeByName" resultType="com.chen.part_time.entity.Type">
+        select * from t_type where name = #{name}
+    </select>
+</mapper>

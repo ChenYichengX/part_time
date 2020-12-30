@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragment :: head(~{::title})">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>兼职详情</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link href="../static/css/me.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<!-- 导航 -->
+<nav th:replace="_fragment :: menu(0)" class="ui inverted attached segment">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">南理校内兼职</h2>
+            <a href="#" class="m-item right item m-mobile-hide"><i class="home icon"></i>首页</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="idea icon"></i>分类</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="edit outline icon"></i>发布兼职信息</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="user plus icon"></i>注册</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="user icon"></i>登录</a>
+            <div class="right m-item item m-mobile-hide">
+                <div class="ui icon input">
+                    <input type="text" placeholder="Search..."/>
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+
+<!-- 中间内容 -->
+<div id="waypoint" class="m-padded-tb-huge m-container animated fadeInLeft">
+    <div class="ui container">
+
+        <!-- 图片区域 -->
+        <div class="ui attached segment">
+            <div style="width: 500px;height: 350px;margin: 0 auto">
+                <img src="https://picsum.photos/id/1/400/350?image=1"
+                     th:src="@{/images/{path}(path=${partTime.firstPicture})}" style="width: 500px;" alt=""
+                     class="ui fluid rounded image">
+            </div>
+        </div>
+
+        <div class="ui attached segment typo typo-selection">
+            <!-- 内容 -->
+            <div class="ui right aligned basic segment">
+                <div class="ui orange basic label" th:text="${partTime.type_name}">服务员</div>
+            </div>
+            <h2 class="ui center aligned header" th:text="${partTime.title}">LaCandie（直招兼职员工）北京龙旗购物中心集合店</h2>
+            <div id="content" class="js-toc-content m-padded-lr-responsive m-padded-tb">
+                <p>工作内容：<span th:text="${partTime.content}">1.接待来店顾客，以良好的服务促进销售，协助店长完成销售目标。
+                    2.做好所负责区域的卫生清洁工作及商品陈列维护工作。
+                    3.店长交代的其他工作事项</span>
+                </p>
+                <p>
+                    要求：<span th:text="${partTime.require_text}"></span>
+                </p>
+                <p>
+                    待遇：<span th:text="${partTime.treatment}"></span>
+                </p>
+                <div class="ui horizontal link list">
+                    <div class="item">
+                        <span class="mouse" style="color: orange; font-size: 21px;"
+                              th:text="${partTime.price}">元/小时</span>&nbsp;&nbsp;
+                    </div>
+                    <div class="ui basic mini label orange">
+                        <span class="yuespan" th:text="${partTime.pay_name}">月结</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui attached positive message">
+            <!-- 博客信息 -->
+            <div class="ui middle aligned grid">
+                <!-- 左边 -->
+                <div class="eleven wide column">
+                    <ui class="list">
+                        <li>商家：<span th:text="${userInfo.nickName}">小伟</span></li>
+                        <li>发表时间：<span th:text="${#dates.format(partTime.updateDate,'yyyy-MM-dd HH:mm:ss')}">2020-05-05 09:08</span>
+                        </li>
+                        <li>联系方式：<span th:text="${userInfo.phone}">13038779806</span></li>
+                        <li>邮箱：<span th:text="${userInfo.email}">361415506@qq.com</span></li>
+                    </ui>
+                </div>
+            </div>
+        </div>
+        <div class="ui attached segment grid">
+            <div class="fifteen wide column">
+                <h3>评论</h3>
+                <!--松散的列表-->
+                <div class="ui relaxed list">
+                    <div class="item" style="margin-left: 15px;">
+                        <span style="font-size: 16px;line-height: 24px; font-family: Consolas">
+                            <span style="font-size: 18px;color: #00b5ad">小明：</span>我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
+                            我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
+                            我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
+                        </span>
+                    </div>
+                    <div class="item" style="margin-left: 15px;">
+                        <span style="font-size: 16px;line-height: 24px; font-family: Consolas">
+                            <span style="font-size: 18px;color: #00b5ad">小明：</span>我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
+                            我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
+                            我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
+                        </span>
+                    </div>
+                    <div class="item" style="margin-left: 15px;">
+                        <span style="font-size: 16px;line-height: 24px; font-family: Consolas">
+                            <span style="font-size: 18px;color: #00b5ad">小明：</span>我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
+                            我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
+                            我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui attached positive grid ">
+            <div class="fourteen wide column">
+            </div>
+            <div class="two wide column">
+                <button class="ui button right" th:attr="data-id=${partTime.id}" onclick="apply(this)"
+                        th:text="${count} == 1 ? '已申请' : '我要申请'" id="applyBtn"
+                        th:classappend="${count} == 0 ? 'teal'">我要兼职</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 底部 footer -->
+<footer th:replace="_fragment :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../static/images/avatar.jpg" class="ui rounded image" alt="" style="width: 90px;">
+                    </div>
+                </div>
+            </div>
+            <div class="four wide column">
+                <h3 class="ui inverted header m-text-thin">最新兼职信息</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">用户故事 （User Story）</a>
+                    <a href="#" class="item">用户故事 （User Story）</a>
+                    <a href="#" class="item">用户故事 （User Story）</a>
+                </div>
+            </div>
+            <div class="five wide column">
+                <h3 class="ui inverted header m-text-thin">联系我</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">Email：chenbbion@outlook.com</a>
+                    <a href="#" class="item">QQ：361415506</a>
+                </div>
+            </div>
+            <div class="four wide column">
+                <h3 class="ui inverted header m-text-thin">广告投放</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item"> 详情及介绍 </a>
+                </div>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-opacity-mini">Copyright © 2020 - 2021 This part-time website Designed by ChenYicheng</p>
+    </div>
+</footer>
+<th:block th:replace="_fragment :: script">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</th:block>
+<script>
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $(function () {
+        if([[${count}]] == 1){
+            $("#applyBtn")
+        }
+    });
+
+    function apply(node) {
+        let id = $(node).data("id");
+        let text = $(node).text();
+        if(text == "已申请"){
+            return false;
+        }
+        $.ajax({
+            url: "/apply/" + id,
+            type: "get",
+            success: function (ref) {
+                if(ref == "false"){
+                    alert("请登录，登录后才可申请兼职");
+                }else if(ref == "NoStu"){
+                    alert("仅有学生才可以申请兼职喔！");
+                }else if(ref == "success"){
+                    alert("申请成功");
+                    $(node).text("已申请");
+                    $(node).removeClass("teal");
+                }
+            }
+        });
+        return false;
+    }
+
+</script>
+</body>
+</html>

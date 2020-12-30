@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:写接口的全类名，相当于告诉 MyBatis 这个配置文件实现哪个接口 -->
+<mapper namespace="com.chen.part_time.dao.IAdminDao">
+
+    <!-- Admin login(Admin admin); -->
+    <select id="login" resultType="com.chen.part_time.entity.Admin">
+        select * from t_admin where username = #{username} and password = #{password}
+    </select>
+
+</mapper>

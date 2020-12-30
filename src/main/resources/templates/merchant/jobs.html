@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>商家管理</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link href="../../static/css/me.css" rel="stylesheet" type="text/css" th:href="@{/css/me.css}">
+</head>
+<body>
+<!-- 导航 -->
+<nav class="ui inverted attached segment m-shadow-small">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">商家管理</h2>
+            <a href="#" th:href="@{/merchant/partTimes}" class="m-item item m-mobile-hide"><i
+                    class="home icon"></i>兼职信息</a>
+            <a href="#" th:href="@{/merchant/apply}" class="active m-item item m-mobile-hide"><i
+                    class="file icon"></i>申请记录</a>
+            <div class="right m-item menu m-mobile-hide">
+                <div class="ui dropdown item">
+                    <div class="text">
+                        <span th:text="${session.user.nickName}">小成</span>
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="#" th:href="@{/merchant/logout}" class="item">注销</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<br>
+<div th:if="${#lists.isEmpty(applys.list)}">
+    <br>
+    <br>
+    <br>
+</div>
+<br>
+<!-- 中间内容 -->
+<div class="m-padded-tb-huge m-container">
+    <div class="ui container">
+        <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+            <i class="close icon"></i>
+            <div class="header">提示</div>
+            <p th:text="${message}">恭喜，操作成功</p>
+        </div>
+
+        <div id="table-container">
+            <div style="margin-top: 5px;" class="ui table" th:each="applyInfoVo : ${applys.list}">
+                <table style="width: 100%" cellspacing="0">
+                    <tr style="background-color: #f1f1f1">
+                        <td>发布时间：<span th:text="${#dates.format(applyInfoVo.publishDate,'yyyy-MM-dd')}">2020-12-7</span> </td>
+                        <td>标题：<span th:text="${applyInfoVo.title}">招外卖员</span></td>
+                        <td>类型：<span th:text="${applyInfoVo.type_name}">外卖员</span></td>
+                        <td>工资：<span th:text="${applyInfoVo.price}">2元/单</span></td>
+                        <td colspan="3">
+                            <a href="#" onclick="return deletePartTime(this)"
+                               th:href="@{/merchant/partTime/{id}/delApply(id=${applyInfoVo.part_time_id})}"
+                               class="ui mini red basic button">删除</a>
+                        </td>
+                    </tr>
+                    <tbody>
+                        <tr class="trHover" th:each="applyStu : ${applyInfoVo.stus}">
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户：<span th:text="${applyStu.username}">xiaoming</span></td>
+                            <td>申请时间：<span th:text="${#dates.format(applyStu.apply_time,'yyyy-MM-dd HH:mm:ss')}">2020-12-7 17:34:12</span></td>
+                            <td>手机号：<span th:text="${applyStu.phone}">13048779806</span></td>
+                            <td>
+                                <input type="hidden" name="stuId" th:value="${applyStu.student_id}">
+                            </td>
+                            <td>
+                                <input type="hidden" name="partTimeId" th:value="${applyInfoVo.part_time_id}">
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${#lists.isEmpty(applys.list)}"><h1>无申请记录</h1></div>
+        </div>
+        <!-- 内容底部 -->
+        <div class="ui bottom attached segment" th:unless="${#lists.isEmpty(applys.list)}">
+            <div class="ui middle aligned grid">
+                <div class="ui floated pagination menu" th:if="${applys.pages} >= 1">
+                    <span class="item">
+                        &nbsp;&nbsp;总共：
+                        <span th:text="${applys.total}"></span>条记录&nbsp;&nbsp;&nbsp;&nbsp;当前页数：[
+                        <span th:text="${applys.pageNum}"></span>/
+                        <span th:text="${applys.pages}"></span>]&nbsp;&nbsp;
+                    </span>
+                    <a onclick="page(this)" th:attr="data-page=1" th:unless="${applys.isFirstPage}" class="item">首页</a>
+                    <a onclick="page(this)" th:attr="data-page=${applys.prePage}" th:unless="${applys.isFirstPage}" class="item">上一页</a>
+                    <a onclick="page(this)" th:attr="data-page=${num}" th:each="num : ${applys.navigatepageNums}" th:text="${num}" class="item" th:classappend="${applys.pageNum == num} ? 'active'"></a>
+                    <a onclick="page(this)" th:attr="data-page=${applys.nextPage}" th:unless="${applys.isLastPage}" class="item">下一页</a>
+                    <a onclick="page(this)" th:attr="data-page=${applys.pages}" th:unless="${applys.isLastPage}" class="item">末页</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div th:if="${#lists.isEmpty(applys.list)}">
+    <br>
+    <br>
+</div>
+<br>
+<!-- 底部 footer -->
+<footer th:replace="_fragment :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../../static/images/avatar.jpg" th:src="@{/images/avatar.jpg}"
+                             class="ui rounded image" alt="" style="width: 90px;">
+                    </div>
+                </div>
+            </div>
+            <div class="four wide column">
+                <h3 class="ui inverted header m-text-thin">最新兼职信息</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">用户故事 （User Story）</a>
+                    <a href="#" class="item">用户故事 （User Story）</a>
+                    <a href="#" class="item">用户故事 （User Story）</a>
+                </div>
+            </div>
+            <div class="five wide column">
+                <h3 class="ui inverted header m-text-thin">联系我</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">Email：chenbbion@outlook.com</a>
+                    <a href="#" class="item">QQ：361415506</a>
+                </div>
+            </div>
+            <div class="four wide column">
+                <h3 class="ui inverted header m-text-thin">广告投放</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item"> 详情及介绍 </a>
+                </div>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-opacity-mini">Copyright © 2020 - 2021 This part-time website Designed by ChenYicheng</p>
+    </div>
+</footer>
+<th:block th:replace="_fragment :: script">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</th:block>
+<script>
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+        on: 'hover'
+    });
+
+    /**
+     * 下一页，上一页按钮触发
+     * @param node
+     */
+    function page(node) {
+        $("[name='page']").val($(node).data("page"));
+        loadData();
+    }
+
+    /**
+     * Ajax 的异步请求，局部刷新页面
+     */
+    function loadData() {
+        $("#table-container").load("/merchant/partTimes/search", {
+            title: $("[name='title']").val(),
+            typeId: $("[name='typeId']").val(),
+            page: $("[name='page']").val()
+        });
+    }
+    //消息提示关闭初始化
+    $('.close').on('click',function () {
+        $(this).closest('.message').transition('fade');
+    });
+
+    function deletePartTime(node) {
+        var stuno = $(node).parent().parent().find("td:eq(1)").text();
+        var b = confirm("确定删除" + stuno + " 的兼职信息吗？");
+        return b;
+    }
+
+    function choose(node){
+        var stuId = $(node).parent().parent().children("td").eq(3).children("input").val();
+        var partTimeId = $(node).parent().parent().children("td").eq(4).children("input").val();
+        var userName = $(node).parent().parent().children("td").eq(0).children("span").text();
+        var b = confirm("确定选择用户为"+ userName +"该学生吗？");
+        if(b){
+            alert("是");
+            $.ajax({
+                url: "/merchant/choose",
+                data: {
+                    partTimeId:partTimeId,
+                    stuId: stuId
+                },
+                success: function (ref) {
+                    if(ref == "success"){
+
+                    }
+                }
+            })
+        }else{
+            alert("否");
+        }
+    }
+
+    $(function () {
+        $(".trHover").hover(function () {
+            $(this).css("background-color","darkgray");
+            $(this).children("td").eq(6).html("<button class='ui button teal' onclick='choose(this)'>选择</button>");
+        },function () {
+            $(this).css("background-color","white");
+            $(this).children("td").eq(6).html("");
+        });
+    });
+
+</script>
+</body>
+</html>

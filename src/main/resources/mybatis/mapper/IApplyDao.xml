@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:写接口的全类名，相当于告诉 MyBatis 这个配置文件实现哪个接口 -->
+<mapper namespace="com.chen.part_time.dao.IApplyDao">
+
+    <resultMap id="applyInfo" type="com.chen.part_time.vo.ApplyInfoVo">
+        <id property="part_time_id" column="id"></id>
+        <result property="title" column="title"></result>
+        <result property="type_name" column="name"></result>
+        <result property="publishDate" column="publishDate"></result>
+        <result property="price" column="price"></result>
+        <result property="user_id" column="user_id"></result>
+
+        <collection property="stus" javaType="java.util.ArrayList" ofType="com.chen.part_time.vo.ApplyStu">
+            <result property="student_id" column="student_id"></result>
+            <result property="username" column="username"></result>
+            <result property="apply_time" column="apply_time"></result>
+            <result property="phone" column="phone"></result>
+        </collection>
+    </resultMap>
+
+    <!-- boolean addApply(Apply apply); -->
+    <insert id="addApply">
+        insert into t_apply_part_time(part_time_id,user_id,apply_time) values(#{part_time_id},#{user_id},#{apply_time})
+    </insert>
+
+    <!-- boolean deleteOtherApply(Apply apply); -->
+    <delete id="deleteOtherApply">
+        delete from t_apply_part_time where part_time_id = #{part_time_id}
+    </delete>
+
+    <!-- int selectApply(Apply apply); -->
+    <select id="selectApply" resultType="_int">
+        select count(id) from t_apply_part_time where part_time_id = #{part_time_id} and user_id = #{user_id}
+    </select>
+
+    <!--    查询申请记录（给商家显示）-->
+    <!--    List<ApplyInfoVo> getApplyInfoByUser_id(Long user_id);-->
+    <select id="getApplyInfoByUser_id" resultMap="applyInfo">
+        SELECT p.id,
+            p.title,
+            t.`name`,
+            p.`publishDate`,
+            p.`price`,
+            p.user_id,
+            a.`user_id` AS student_id,
+            u.`username`,
+            u.`phone`,
+            a.`apply_time`
+        FROM
+            t_part_time p LEFT JOIN t_type t ON p.`type_id`=t.`id`
+            LEFT JOIN t_apply_part_time a ON p.`id` = a.`part_time_id`
+            LEFT JOIN t_user u ON a.`user_id` = u.`id`
+        WHERE p.user_id = #{user_id} AND a.`user_id` IS NOT NULL
+    </select>
+</mapper>

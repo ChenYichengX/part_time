@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:写接口的全类名，相当于告诉 MyBatis 这个配置文件实现哪个接口 -->
+<mapper namespace="com.chen.part_time.dao.IUserDao">
+
+    <!-- User checkUser(User user); -->
+    <select id="checkUser" resultType="com.chen.part_time.entity.User">
+        select * from t_user where username = #{username} and password = #{password}
+    </select>
+
+    <!-- int checkUsername(String username); -->
+    <select id="checkUsername" resultType="java.lang.Integer">
+        select count(1) from t_user where username = #{username}
+    </select>
+
+    <!-- int insertUser(User user); -->
+    <insert id="insertUser">
+        insert into t_user(username,nickname,password,email,phone,createDate,type)
+        value(#{username},#{nickName},#{password},#{email},#{phone},#{createDate},#{type})
+    </insert>
+
+    <!--    User getUserById(Long id);-->
+    <select id="getUserById" resultType="com.chen.part_time.entity.User">
+        select * from t_user where id = #{id}
+    </select>
+
+    <!--    User getUserByPart_time_id(Long part_time_id);-->
+    <select id="getUserByPart_time_id" resultType="com.chen.part_time.entity.User">
+        select u.* from t_user u left join t_part_time p on p.user_id = u.id
+        where p.id = #{part_time_id}
+    </select>
+
+    <!--    List<User> getUsersByPart_time_id(Long part_time_id);-->
+    <select id="getUsersByPart_time_id" resultType="com.chen.part_time.entity.User">
+        SELECT * FROM t_user
+        WHERE id IN(
+            SELECT a.user_id FROM t_apply_part_time a
+            LEFT JOIN t_part_time p ON p.`id` = a.`part_time_id`
+            WHERE p.`id`= #{part_time_id}
+        )
+    </select>
+</mapper>

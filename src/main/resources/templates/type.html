@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head th:replace="_fragment :: head(~{::title})">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>兼职分类</title>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+		<link rel="stylesheet" href="../static/css/me.css">
+	</head>
+	<body>
+	<!-- 导航 -->
+	<nav th:replace="_fragment :: menu(2)" class="ui inverted attached segment">
+		<div class="ui container">
+			<div class="ui inverted secondary stackable menu">
+				<h2 class="ui teal header item">南理校内兼职</h2>
+				<a href="index.html" class="m-item right item m-mobile-hide"><i class="home icon"></i>首页</a>
+				<a href="type.html" class="m-item active item m-mobile-hide"><i class="idea icon"></i>分类</a>
+				<a href="#" class="m-item item m-mobile-hide"><i class="edit outline icon"></i>发布兼职信息</a>
+				<a href="regist.html" class="m-item item m-mobile-hide"><i class="user plus icon"></i>注册</a>
+				<a href="login.html" class="m-item item m-mobile-hide"><i class="user icon"></i>登录</a>
+				<div class="right m-item item m-mobile-hide">
+					<div class="ui icon input">
+						<input type="text" placeholder="Search..."/>
+						<i class="search link icon"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+		<a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+			<i class="sidebar icon"></i>
+		</a>
+	</nav>
+
+		<!-- 中间内容 -->
+		<div class="m-padded-tb-huge m-container">
+			<div class="ui container">
+				<!-- header -->
+				<div class="ui top attached segment">
+					<div class="ui middle aligned two column grid">
+						<div class="column">
+							<h3 class="ui teal header">分类</h3>
+						</div>
+						<div class="right aligned column">
+							共 <h3 class="ui orange header m-inline-block" th:text="${typeTotal}">14</h3>个
+						</div>
+					</div>
+				</div>
+				<div class="ui attached segment m-padded-tb-large">
+					<div class="ui labeled button m-margin-tb-tiny" th:each="type : ${allType}">
+						<a href="#" th:href="@{/type/{id}(id=${type.id})}" th:classappend="${id == type.id} ? 'teal'" class="ui basic button" th:text="${type.name}">服务员</a>
+						<div class="ui basic left pointing label" th:classappend="${id == type.id} ? 'teal'" th:text="${type.size}" >24</div>
+					</div>
+				</div>
+				<div class="ui top attached teal segment" id="index-container">
+					<div class="ui padded vertical segment m-padded-tb-large m-padded-lr-clear" th:each="partTime : ${info.list}">
+						<div class="ui mobile reversed stackable grid">
+							<!-- 文章内容 -->
+							<div class="twelve wide column">
+								<h3 class="ui header">
+									<a class="m-black" href="#" th:href="@{/partTime/{id}(id=${partTime.id})}"
+									   target="_blank" th:attr="data-id=${partTime.id}" onclick="return partTime(this)" th:text="${partTime.title}">LaCandie（直招兼职员工）北京龙旗购物中心集合店</a></h3>
+								<p>工作内容：<span th:text="${partTime.content}">1.接待来店顾客，以良好的服务促进销售，协助店长完成销售目标。
+                                    2.做好所负责区域的卫生清洁工作及商品陈列维护工作。
+                                    3.店长交代的其他工作事项</span><br>
+									要求：<span th:text="${partTime.require_text}"></span><br>
+								</p>
+								<div class="ui grid">
+									<div class="eleven wide column">
+										<div class="ui horizontal link list">
+											<div class="item">
+												<div class="content"><a href="#" th:href="@{/type/{id}(id=${partTime.type_id})}" class="header" th:text="${partTime.type_name}">服务员</a></div>
+											</div>
+											<div class="item">
+												<span style="color: orange;font-size: 17px" th:text="${partTime.price}">15元/小时</span>
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											</div>
+											<div class="ui basic label orange">
+												<span class="yuespan" th:text="${partTime.pay_name}">月结</span>
+											</div>
+											<div class="item">
+												<i class="calendar alternate outline icon"></i><span th:text="${#dates.format(partTime.updateDate,'yyyy-MM-dd')}"></span>
+											</div>
+											<div class="item">
+												<i class="eye icon m-margin-buttom"></i><span th:text="${partTime.views}">2342</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 图片 -->
+							<div class="four wide column">
+								<a href="#" th:href="@{/partTime/{id}(id=${partTime.id})}" target="_blank" th:attr="data-id=${partTime.id}" onclick="return partTime(this)">
+									<img src="https://picsum.photos/id/1/800/450?image=1" th:src="@{/images/{path}(path=${partTime.firstPicture})}"
+										 style="width: 224px; height: 126px;" alt="" class="ui rounded image">
+								</a>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- 内容底部 -->
+				<div class="ui bottom attached segment">
+					<div class="ui middle aligned two column grid">
+						<div class="ui floated pagination menu" th:if="${info.pages} >= 1">
+							<span class="item">&nbsp;&nbsp;总共：<span th:text="${info.total}"></span>条记录&nbsp;&nbsp;&nbsp;&nbsp;当前页数：[<span th:text="${info.pageNum}"></span>/<span th:text="${info.pages}"></span>]&nbsp;&nbsp;</span>
+							<a onclick="page(this)" th:attr="data-page=1,data-id=${id}" th:unless="${info.isFirstPage}" class="item">首页</a>
+							<a onclick="page(this)" th:attr="data-page=${info.prePage},data-id=${id}" th:unless="${info.isFirstPage}" class="item">上一页</a>
+							<a onclick="page(this)" th:attr="data-page=${num},data-id=${id}" th:each="num : ${info.navigatepageNums}" th:text="${num}" class="item" th:classappend="${info.pageNum == num} ? 'active'"></a>
+							<a onclick="page(this)" th:attr="data-page=${info.nextPage},data-id=${id}"  th:unless="${info.isLastPage}" class="item">下一页</a>
+							<a onclick="page(this)" th:attr="data-page=${info.pages},data-id=${id}" th:unless="${info.isLastPage}" class="item">末页</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	<!-- 底部 footer -->
+	<footer th:replace="_fragment :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+		<div class="ui center aligned container">
+			<div class="ui inverted divided stackable grid">
+				<div class="three wide column">
+					<div class="ui inverted link list">
+						<div class="item">
+							<img src="../static/images/avatar.jpg" class="ui rounded image" alt="" style="width: 90px;">
+						</div>
+					</div>
+				</div>
+				<div class="four wide column">
+					<h3 class="ui inverted header m-text-thin">最新兼职信息</h3>
+					<div class="ui inverted link list">
+						<a href="#" class="item">用户故事 （User Story）</a>
+						<a href="#" class="item">用户故事 （User Story）</a>
+						<a href="#" class="item">用户故事 （User Story）</a>
+					</div>
+				</div>
+				<div class="five wide column">
+					<h3 class="ui inverted header m-text-thin">联系我</h3>
+					<div class="ui inverted link list">
+						<a href="#" class="item">Email：chenbbion@outlook.com</a>
+						<a href="#" class="item">QQ：361415506</a>
+					</div>
+				</div>
+				<div class="four wide column">
+					<h3 class="ui inverted header m-text-thin">广告投放</h3>
+					<div class="ui inverted link list">
+						<a href="#" class="item"> 详情及介绍 </a>
+					</div>
+				</div>
+			</div>
+			<div class="ui inverted section divider"></div>
+			<p class="m-opacity-mini">Copyright © 2020 - 2021 This part-time website Designed by ChenYicheng</p>
+		</div>
+	</footer>
+	<th:block th:replace="_fragment :: script">
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+	</th:block>
+	<script>
+		$('.menu.toggle').click(function () {
+			$('.m-item').toggleClass('m-mobile-hide');
+		});
+
+		/**
+		 * 下一页，上一页按钮触发
+		 * @param node
+		 */
+		function page(node) {
+			loadData($(node).data("page"),$(node).data("id"));
+		}
+
+		/**
+		 * Ajax 的异步请求，局部刷新页面
+		 */
+		function loadData(pm,id) {
+			window.open("/type/" + id + "?page=" + pm,"_self");
+		}
+	</script>
+	</body>
+</html>

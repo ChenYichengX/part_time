@@ -1,0 +1,30 @@
+spring:
+  thymeleaf:
+    mode: HTML
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  #邮件发送 配置
+  mail:
+    host: smtp.qq.com
+    username: 361415506@qq.com
+    password: balampqsxsiqbjjg
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+  redis:
+    timeout: 3000ms
+mybatis:
+  # mybatis 主配置文件
+  config-location: classpath:mybatis/mybatis-config.xml
+  # mapper 映射文件
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+logging:
+  level:
+    com.chen.part_time.dao: debug

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chen.part_time.dao.IUnitDao">
+
+    <!--    boolean saveUnit(Unit Unit);-->
+    <insert id="saveUnit">
+        insert into t_Unit(name) values(#{name})
+    </insert>
+    <!--    Unit getUnit(Long id);-->
+    <select id="getUnit" resultType="com.chen.part_time.entity.Unit">
+        select * from t_Unit where id = #{id}
+    </select>
+    <!--    List<Unit> getAllUnit();-->
+    <select id="getAllUnit" resultType="com.chen.part_time.entity.Unit">
+        select * from t_Unit
+    </select>
+    <!--    boolean updateUnit(Unit Unit);-->
+    <update id="updateUnit">
+        update t_Unit set name = #{name} where id = #{id}
+    </update>
+    <!--    boolean deleteUnit(Long id);-->
+    <delete id="deleteUnit">
+        delete from t_Unit where id = #{id}
+    </delete>
+    <!--    Unit getUnitByName(String name);-->
+    <select id="getUnitByName" resultType="com.chen.part_time.entity.Unit">
+        select * from t_Unit where name = #{name}
+    </select>
+</mapper>

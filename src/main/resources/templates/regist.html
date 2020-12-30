@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragment :: head(~{::title})">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册页面</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link href="../static/css/me.css" rel="stylesheet" type="text/css">
+    <style>
+        font{
+            text-align: left;
+            margin-left: 0px;
+        }
+    </style>
+</head>
+<body>
+<!-- 导航 -->
+<nav th:replace="_fragment :: menu(4)" class="ui inverted attached segment">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">南理校内兼职</h2>
+
+            <a href="index.html" class="m-item right item m-mobile-hide"><i class="home icon"></i>首页</a>
+            <a href="type.html" class="m-item item m-mobile-hide"><i class="idea icon"></i>分类</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="edit outline icon"></i>发布兼职信息</a>
+            <a href="regist.html" class="m-item item m-mobile-hide active"><i class="user plus icon"></i>注册</a>
+            <a href="login.html" class="m-item item m-mobile-hide"><i class="user icon"></i>登录</a>
+            <div class="right m-item item m-mobile-hide">
+                <div class="ui icon input">
+                    <input type="text" placeholder="Search..."/>
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+
+<!-- 中间内容 -->
+<div class="m-padded-tb-large">
+    <div class="m-container m-padded-tb-massive" style="max-width: 30em !important;">
+        <div class="ui middle aligned center aligned grid">
+            <div class="column">
+                <h2 class="ui teal image header">
+                    <div class="content">
+                        南理校内兼职注册
+                    </div>
+                </h2>
+                <form class="ui large form" method="post" id="codeForm">
+                    <div class="ui segment">
+                        <table>
+                            <tr>
+                                <td>身份：</td>
+                                <td>
+                                    <select name="type">
+                                        <option value="0">学生</option>
+                                        <option value="1">商家</option>
+                                    </select>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" name="username" id="username" placeholder="用户名">
+                            </div>
+                            <p><font id="usernameResult"></font></p>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                <input type="password" id="password" name="password" placeholder="密码">
+                            </div>
+                            <p><font id="passwordResult"></font></p>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="user circle icon"></i>
+                                <input type="text" id="nickName" name="nickName" placeholder="昵称">
+                            </div>
+                            <p><font id="nickNameResult"></font></p>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="phone icon"></i>
+                                <input type="text" id="phone" name="phone" placeholder="电话">
+                            </div>
+                            <p><font id="phoneResult"></font></p>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="envelope icon"></i>
+                                <input type="email" id="email" name="email" placeholder="邮箱">
+                                <label><button class="ui button" id="sendCode">获取验证码</button></label>
+                            </div><br>
+                            <font id="countDown" color="red"></font>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="key icon"></i>
+                                <input type="text" id="validate" name="validate" placeholder="验证码">
+                            </div><br>
+                            <font id="validateResult" color="red"></font>
+                        </div>
+                        <div class="field">
+                            <div class="ui">
+                                <button class="ui button" id="register">注册</button>
+                            </div>
+                            <p><font id="result"></font></p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 底部 footer -->
+<footer th:replace="_fragment :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../static/images/avatar.jpg" class="ui rounded image" alt="" style="width: 90px;">
+                    </div>
+                </div>
+            </div>
+            <div class="four wide column">
+                <h3 class="ui inverted header m-text-thin">最新兼职信息</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">用户故事 （User Story）</a>
+                    <a href="#" class="item">用户故事 （User Story）</a>
+                    <a href="#" class="item">用户故事 （User Story）</a>
+                </div>
+            </div>
+            <div class="five wide column">
+                <h3 class="ui inverted header m-text-thin">联系我</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">Email：chenbbion@outlook.com</a>
+                    <a href="#" class="item">QQ：361415506</a>
+                </div>
+            </div>
+            <div class="four wide column">
+                <h3 class="ui inverted header m-text-thin">广告投放</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item"> 详情及介绍 </a>
+                </div>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-opacity-mini">Copyright © 2020 - 2021 This part-time website Designed by ChenYicheng</p>
+    </div>
+</footer>
+<th:block th:replace="_fragment :: script">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</th:block>
+<script>
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    var t = 90;//设计倒计时时间
+    var intetval;
+    function refer() {
+        $("#countDown").text("请于"+t+"秒内填写验证码");
+        t--;
+        if(t<=0){
+            clearInterval(intetval);
+            $("#countDown").text("验证码已失效，请重新发送！");
+        }
+    }
+
+    $("#username").on("blur",function () {
+        let value = $("#username").val().trim();
+        if(value == '' || value.length > 16){
+            $("#usernameResult").attr("color","red");
+            $("#usernameResult").text("用户名不能为空且长度不能超过16");
+            $("#username").attr("validateStatus",false);
+            return false;
+        }
+        $.ajax({
+            url: "/register/check",
+            data: {username: value},
+            success: function (data) {
+                if(data == "ok"){
+                    $("#usernameResult").attr("color","green");
+                    $("#usernameResult").text("可用");
+                    $("#username").attr("validateStatus",true);
+                }else{
+                    $("#usernameResult").attr("color","red");
+                    $("#usernameResult").text("用户名已存在");
+                    $("#username").attr("validateStatus",false);
+                }
+            }
+        });
+    });
+
+    $("#password").on("blur",function () {
+        let value = $("#password").val().trim();
+        if(value == '' || value.length > 25){
+            $("#passwordResult").attr("color","red");
+            $("#passwordResult").text("密码不能为空且长度不能超过25");
+            $("#password").attr("validateStatus",false);
+            return false;
+        }
+        $("#passwordResult").attr("color","green");
+        $("#passwordResult").text("√");
+        $("#password").attr("validateStatus",true);
+    });
+
+    $("#nickName").on("blur",function () {
+        let value = $("#nickName").val().trim();
+        if(value == '' || value.length > 16){
+            $("#nickNameResult").attr("color","red");
+            $("#nickNameResult").text("昵称不能为空且长度不能超过16");
+            $("#nickName").attr("validateStatus",false);
+            return false;
+        }
+        $("#nickNameResult").attr("color","green");
+        $("#nickNameResult").text("√");
+        $("#nickName").attr("validateStatus",true);
+    });
+
+    $("#phone").on("blur",function () {
+        let value = $("#phone").val().trim();
+        var myreg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+        if(!myreg.test(value)){
+            $("#phoneResult").attr("color","red");
+            $("#phoneResult").text("电话号码必须为正确的11位数字");
+            $("#phone").attr("validateStatus",false);
+            return false;
+        }
+        $("#phoneResult").attr("color","green");
+        $("#phoneResult").text("√");
+        $("#phone").attr("validateStatus",true);
+    });
+
+    $("#email").on("blur",function () {
+        let value = $("#email").val().trim();
+        if(value.length > 80){
+            $("#countDown").attr("color","red");
+            $("#countDown").text("请您填写邮箱域名:@域名，如good@tom.com");
+            $("#email").attr("validateStatus",false);
+            return false;
+        }
+        var regx = /^\w+@\w+(\.[a-zA-Z]{2,3}){1,2}$/;
+        if(!regx.test(value)){
+            $("#countDown").attr("color","red");
+            $("#countDown").text("请您填写邮箱域名:@域名，如good@tom.com");
+            $("#email").attr("validateStatus",false);
+            return false;
+        }
+        $("#countDown").attr("color","green");
+        $("#countDown").text("√");
+        $("#email").attr("validateStatus",true);
+    });
+
+    $("#validate").on("blur",function () {
+        let value = $("#validate").val().trim();
+        var myreg = /^\d{6}$/;
+        if(!myreg.test(value)){
+            $("#validateResult").attr("color","red");
+            $("#validateResult").text("请查看邮箱，输入正确的验证码");
+            $("#validate").attr("validateStatus",false);
+            return false;
+        }
+        $("#validateResult").attr("color","green");
+        $("#validateResult").text("√");
+        $("#validate").attr("validateStatus",true);
+    });
+
+    $(function () {
+        $("#sendCode").click(function () {
+            if ($("#username").attr("validateStatus") != "true") {
+                $("#username").focus();
+            } else if ($("#password").attr("validateStatus") != "true") {
+                $("#password").focus();
+            } else if ($("#nickName").attr("validateStatus") != "true") {
+                $("#nickName").focus();
+            } else if ($("#phone").attr("validateStatus") != "true") {
+                $("#phone").focus();
+            } else if ($("#email").attr("validateStatus") != "true") {
+                $("#email").focus();
+            } else {
+                $.post("/register/sendCode",$("#codeForm").serialize(),function (data) {
+                    if(data=="true"){
+                        t=90;
+                        clearInterval(intetval);
+                        intetval=setInterval("refer()",1000);
+                    }else if(data=="limit"){
+                        clearInterval(intetval);
+                        $("#countDown").text("单日发送超过次数");
+                    }
+                });
+            }
+            return false;
+        });
+
+        $("#register").click(function () {
+            if ($("#username").attr("validateStatus") != "true") {
+                $("#username").focus();
+            } else if ($("#password").attr("validateStatus") != "true") {
+                $("#password").focus();
+            } else if ($("#nickName").attr("validateStatus") != "true") {
+                $("#nickName").focus();
+            } else if ($("#phone").attr("validateStatus") != "true") {
+                $("#phone").focus();
+            } else if ($("#email").attr("validateStatus") != "true") {
+                $("#email").focus();
+            } else if ($("#validate").attr("validateStatus") != "true") {
+                $("#validate").focus();
+            }else{
+                $.post("/register/verify",$("#codeForm").serialize(),function (data) {
+                    if(data=="true"){
+                        clearInterval(intetval);
+                        $("#countDown").text("");
+                        alert("注册成功！");
+                        window.open("/merchant/","_self");
+                    }else{
+                        $("#result").attr("color","red");
+                        $("#result").text("验证不通过，注册失败！");
+                    }
+                });
+            }
+            return false;
+        });
+    });
+
+</script>
+</body>
+</html>

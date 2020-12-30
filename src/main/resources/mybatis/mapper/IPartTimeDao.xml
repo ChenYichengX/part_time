@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chen.part_time.dao.IPartTimeDao">
+
+    <resultMap id="merchant" type="com.chen.part_time.vo.MerchantPartTime">
+        <id property="id" column="id"></id>
+        <result property="type_name" column="typeName"></result>
+        <result property="user_name" column="username"></result>
+        <result property="user_name" column="username"></result>
+    </resultMap>
+
+    <!-- PartTime getPartTimeById(Long id); -->
+    <select id="getPartTimeById" resultMap="merchant">
+         select
+        p.id,
+        p.user_id,
+        p.type_id,
+        p.title,
+        p.content,
+        p.require_text,
+        p.publishDate,
+        p.treatment,
+        p.price,
+        p.pay_id,
+        p.updateDate,
+        p.firstPicture,
+        p.views,
+        t.name typeName,
+        u.username,
+        pay.name pay_name
+        from t_part_time p left join t_type t on p.type_id = t.id
+        left join t_user u on u.id = p.user_id left join t_payment_type pay
+        on pay.id = p.pay_id where p.id = #{id}
+    </select>
+
+    <!-- List<MerchantPartTime> getAllPartTime(PartTime partTime); -->
+    <select id="getAllPartTime" resultMap="merchant">
+        select
+        p.id,
+        p.user_id,
+        p.type_id,
+        p.title,
+        p.content,
+        p.require_text,
+        p.publishDate,
+        p.treatment,
+        p.price,
+        p.pay_id,
+        p.updateDate,
+        p.firstPicture,
+        p.views,
+        t.name typeName,
+        u.username,
+        pay.name pay_name
+        from t_part_time p left join t_type t on p.type_id = t.id
+        left join t_user u on u.id = p.user_id left join t_payment_type pay
+        on pay.id = p.pay_id
+        <where>
+            <if test="title != null and title != ''">
+                title like '%' #{title} '%'
+            </if>
+            <if test="user_name != null and user_name != ''">
+                u.username like '%' #{user_name} '%'
+            </if>
+            <if test="type_id != null">
+                and type_id = #{type_id}
+            </if>
+            <if test="user_id != null">
+                and user_id = #{user_id}
+            </if>
+        </where>
+        order by updateDate desc
+    </select>
+
+    <!--    List<MerchantPartTime> getAllPartTimeByView();-->
+    <select id="getAllPartTimeByView" resultMap="merchant">
+        select
+        p.id,
+        p.user_id,
+        p.type_id,
+        p.title,
+        p.content,
+        p.require_text,
+        p.publishDate,
+        p.treatment,
+        p.price,
+        p.pay_id,
+        p.updateDate,
+        p.firstPicture,
+        p.views,
+        t.name typeName,
+        u.username,
+        pay.name pay_name
+        from t_part_time p left join t_type t on p.type_id = t.id
+        left join t_user u on u.id = p.user_id left join t_payment_type pay
+        on pay.id = p.pay_id
+        <where>
+            <if test="title != null and title != ''">
+                title like '%' #{title} '%'
+            </if>
+            <if test="user_name != null and user_name != ''">
+                or u.username like '%' #{user_name} '%'
+            </if>
+            <if test="type_name != null">
+                or t.name like '%' #{type_name} '%'
+            </if>
+            <if test="content != null">
+                or content = '%' #{content} '%'
+            </if>
+        </where>
+        order by views desc
+    </select>
+
+    <!-- boolean savePartTime(PartTime partTime); 没有 updateDate 更新时间、views 浏览次数 -->
+    <insert id="savePartTime">
+        insert into t_part_time(user_id,type_id,title,content,require_text,publishDate,treatment,price,pay_id,firstPicture,updateDate)
+        values(#{user_id},#{type_id},#{title},#{content},#{require_text},#{publishDate},#{treatment},#{price},#{pay_id},#{firstPicture},#{publishDate})
+    </insert>
+
+    <!-- boolean updatePartTime(PartTime partTime); -->
+    <update id="updatePartTime">
+        update t_part_time set
+                    type_id = #{type_id},
+                    title = #{title},
+                    content = #{content},
+                    require_text = #{require_text},
+                    treatment = #{treatment},
+                    price = #{price},
+                    pay_id = #{pay_id},
+                    firstPicture = #{firstPicture},
+                    updateDate = #{updateDate}
+        where id = #{id}
+    </update>
+
+    <!-- boolean updatePartTimeNoPicture(PartTime partTime); -->
+    <update id="updatePartTimeNoPicture">
+        update t_part_time set
+                    type_id = #{type_id},
+                    title = #{title},
+                    content = #{content},
+                    require_text = #{require_text},
+                    treatment = #{treatment},
+                    price = #{price},
+                    pay_id = #{pay_id},
+                    updateDate = #{updateDate}
+        where id = #{id}
+    </update>
+
+    <!-- boolean deletePartTime(Long id); -->
+    <delete id="deletePartTime">
+        delete from t_part_time where id = #{id}
+    </delete>
+
+    <!--    void addViewsById(Long id);-->
+    <update id="addViewsById">
+        update t_part_time set views = views + 1 where id = #{id}
+    </update>
+</mapper>
