@@ -2,16 +2,12 @@ package com.chen.part_time.web;
 
 import com.chen.part_time.dao.IApplyDao;
 import com.chen.part_time.entity.*;
-import com.chen.part_time.service.IApplyService;
-import com.chen.part_time.service.IPartTimeService;
-import com.chen.part_time.service.ITypeService;
-import com.chen.part_time.service.IUserService;
+import com.chen.part_time.service.*;
 import com.chen.part_time.vo.MerchantPartTime;
 import com.chen.part_time.vo.TypeVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.mail.SimpleMailMessage;
@@ -46,6 +42,8 @@ public class IndexController {
     private IApplyService applyService;
     @Autowired
     private JavaMailSenderImpl javaMailSender;
+    @Autowired
+    private IAdService adService;
 
     private String host = "123.57.174.182";
     private int port = 6379;
@@ -74,6 +72,7 @@ public class IndexController {
         model.addAttribute("latest", pageInfo);
         model.addAttribute("types", voPageInfo);
         model.addAttribute("info", contentInfo);
+        model.addAttribute("ads",adService.getAdsByCode("index-left"));
         return "index";
     }
 
@@ -144,14 +143,19 @@ public class IndexController {
             // session.setAttribute("message","请先登录，登录后可查看详细信息");
             return "redirect:/merchant";
         }
-        User u = (User) user;
-        int count = applyService.selectApply(new Apply(id, u.getId())); // 如果已经申请，则 count 为 1
+        if (user instanceof User) {
+            User u = (User) user;
+            int count = applyService.selectApply(new Apply(id, u.getId())); // 如果已经申请，则 count 为 1
+            model.addAttribute("count", count);
+        }
+        if(user instanceof Admin){
+            model.addAttribute("count", 2);
+        }
         partTimeService.addViewsById(id);
         MerchantPartTime partTimeById = partTimeService.getPartTimeById(id);
         User userById = userService.getUserById(partTimeById.getUser_id());
         model.addAttribute("partTime", partTimeById);
         model.addAttribute("userInfo", userById);
-        model.addAttribute("count",count);
         return "partTime";
     }
 
@@ -265,6 +269,7 @@ public class IndexController {
     /**
      * 申请兼职信息
      * 发送给商家，说谁谁谁申请了你的哪个兼职
+     *
      * @return
      */
     @GetMapping("/apply/{id}")
@@ -285,14 +290,14 @@ public class IndexController {
         if (u.getType() == 1) { // 不是学生
             return "NoStu";
         }
-        Apply apply = new Apply(id,u.getId(),new Date());
+        Apply apply = new Apply(id, u.getId(), new Date());
         applyService.addApply(apply); // 添加兼职申请记录
         // 通过 part_time_id 获取商家信息
         User merchant = userService.getUserByPart_time_id(id);
         // 发送邮件通知商家
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setSubject("通知");
-        simpleMailMessage.setText("亲爱的" + merchant.getNickName() + ",刚刚"+ u.getUsername() +"申请了您的一个职位,快去查看吧(*^_^*)");
+        simpleMailMessage.setText("亲爱的" + merchant.getNickName() + ",刚刚" + u.getUsername() + "申请了您的一个职位,快去查看吧(*^_^*)");
         simpleMailMessage.setTo(merchant.getEmail());
         simpleMailMessage.setFrom("361415506@qq.com");
         javaMailSender.send(simpleMailMessage);

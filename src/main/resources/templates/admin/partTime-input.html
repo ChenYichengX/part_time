@@ -12,9 +12,9 @@
     <div class="ui container">
         <div class="ui inverted secondary stackable menu">
             <h2 class="ui teal header item">后台管理</h2>
-            <a href="#" class="m-item item m-mobile-hide"><i class="home icon"></i>兼职信息</a>
+            <a href="#" class="m-item item m-mobile-hide active"><i class="home icon"></i>兼职信息</a>
             <a href="#" class="m-item item m-mobile-hide"><i class="idea icon"></i>分类</a>
-            <a href="#" class="m-item item m-mobile-hide active"><i class="tags icon"></i>支付方式</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="tags icon"></i>支付方式</a>
             <div class="right m-item menu m-mobile-hide">
                 <div class="ui dropdown item">
                     <div class="text">
@@ -50,7 +50,7 @@
                 <table cellspacing="10px">
                     <tr>
                         <div class="ui required field input">
-                            <td class="m-margin-top-mini">分类：</label></td>
+                            <td class="m-margin-top-mini">分类：</td>
                             <td>
                                 <select name="type_id" style="width: 200px;">
                                     <option th:each="type : ${types}" th:text="${type.name}" th:value="${type.id}"
@@ -60,7 +60,6 @@
                             </td>
                             <td></td>
                         </div>
-
                     </tr>
                     <tr>
                         <td class="m-margin-top-mini">标题：</td>
@@ -74,7 +73,6 @@
                     <tr>
                         <td class="m-margin-top-mini">图片：</td>
                         <td>
-
                             <span style="line-height: 30px;"><b>*请选择一张工作的图片或商家店铺的图片*</b></span>
                             <div class="" th:classappend="${partTime.firstPicture == null or partTime.firstPicture == ''} ? 'required field'">
                                 <input type="file" name="file" onchange="getFile(this)">
@@ -354,10 +352,6 @@
             }
         });
     }
-
-
-
-
 </script>
 </body>
 </html>

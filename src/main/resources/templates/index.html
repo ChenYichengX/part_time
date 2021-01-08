@@ -33,6 +33,15 @@
 
 <!-- 中间内容 -->
 <div class="m-padded-tb-huge">
+    <div id="Ad" style="width: 239px; height: 430px; display: inline-block;" th:unless="${#lists.isEmpty(ads)}">
+        <button style="float: right" onclick="closeAd()">×</button>
+        <div style="width: 239px; margin-top: 22px;" th:each="ad : ${ads}">
+            <a href="#" th:href="${ad.actionValue}" th:target="${ad.actionType} == 1 ? '_self' : '_blank'">
+                <img src="" th:src="@{/images/{path}(path=${ad.imageUrl})}" width="239px" th:alt="${ad.title}" th:title="${ad.title}">
+            </a>
+        </div>
+    </div>
+
     <div class="ui container">
         <div class="ui stackable grid">
             <!-- 左边博客 -->
@@ -213,6 +222,10 @@
     $('.menu.toggle').click(function () {
         $('.m-item').toggleClass('m-mobile-hide');
     });
+
+    function closeAd() {
+        $("#Ad").hide()
+    }
 
     /**
      * 下一页，上一页按钮触发

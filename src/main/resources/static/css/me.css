@@ -152,3 +152,10 @@ body{
 .tr_hover :hover{
     background-color: darkgray;
 }
+/*广告位*/
+#Ad{
+    position: fixed;
+    margin-left: 20px;
+    margin-bottom: 100px;
+    z-index: 999;
+}

@@ -18,6 +18,13 @@ public interface IAdService {
     List<Ad> getAdsByCode(String code);
 
     /**
+     * 通过广告 id 查询广告
+     * @param id
+     * @return
+     */
+    Ad getAdById(Long id);
+
+    /**
      * 添加广告Ad
      * @param ad
      * @return

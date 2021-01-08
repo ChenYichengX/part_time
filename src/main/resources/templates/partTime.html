@@ -120,7 +120,10 @@
             <div class="fourteen wide column">
             </div>
             <div class="two wide column">
-                <button class="ui button right" th:attr="data-id=${partTime.id}" onclick="apply(this)"
+                <button class="ui button right"
+                        th:attr="data-id=${partTime.id}"
+                        onclick="apply(this)"
+                        th:if="${count} != 2"
                         th:text="${count} == 1 ? '已申请' : '我要申请'" id="applyBtn"
                         th:classappend="${count} == 0 ? 'teal'">我要兼职</button>
             </div>

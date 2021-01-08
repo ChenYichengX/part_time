@@ -55,7 +55,7 @@ public class PartTimeController {
         try {
             String path = ResourceUtils.getURL("classpath:").getPath() + "static/images";
             String realPath = path.replace("/","\\").substring(1,path.length());
-//            System.out.println(realPath);
+//            System.out.println(realPath); // D:\gitRep\part_time\target\classes\static\images
             basePath = realPath;
         } catch (FileNotFoundException e) {
             e.printStackTrace();

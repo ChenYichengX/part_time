@@ -7,16 +7,44 @@
 
     <!-- List<Ad> getAdsByCode(String code) -->
     <select id="getAdsByCode" resultType="com.chen.part_time.entity.Ad">
-
+        select
+        id,
+        ad_position_code code,
+        title,
+        image_url imageUrl,
+        action_type actionType,
+        action_value actionValue
+        from t_ad
+        <where>
+            delete_flag = 0
+            <if test="code != null and code != ''">
+                and ad_position_code = #{code}
+            </if>
+        </where>
     </select>
 
     <!-- boolean insertAd(Ad ad) -->
     <insert id="insertAd">
-
+        insert into t_ad(ad_position_code,title,image_url,action_type,action_value)
+        values(#{code},#{title},#{imageUrl},#{actionType},#{actionValue})
     </insert>
 
     <!-- boolean deleteAdById(Long id) -->
-    <delete id="deleteAdById">
+    <update id="deleteAdById">
+        update t_ad set delete_flag = 1 where id = #{id}
+    </update>
 
-    </delete>
+    <!-- Ad getAdById(Long id) -->
+    <select id="getAdById" resultType="com.chen.part_time.entity.Ad">
+        select
+        id,
+        ad_position_code code,
+        title,
+        image_url imageUrl,
+        action_type actionType,
+        action_value actionValue
+        from t_ad
+        where delete_flag = 0
+        and id = #{id}
+    </select>
 </mapper>

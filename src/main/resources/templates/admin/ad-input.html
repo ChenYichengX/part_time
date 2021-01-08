@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link href="../../static/css/me.css" rel="stylesheet" type="text/css" th:href="@{/css/me.css}">
+</head>
+<body>
+<!-- 导航 -->
+<nav th:replace="admin/admin_fragment :: menu(5)" class="ui inverted attached segment m-shadow-small">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">后台管理</h2>
+            <a href="#" class="m-item item m-mobile-hide active"><i class="home icon"></i>兼职信息</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="idea icon"></i>分类</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="tags icon"></i>支付方式</a>
+            <div class="right m-item menu m-mobile-hide">
+                <div class="ui dropdown item">
+                    <div class="text">
+                        <span th:text="${session.user.username}">小成</span>
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="#" th:href="@{/admin/logout}" class="item">注销</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+<div class="ui attached pointing menu">
+    <div class="ui container">
+        <div class="right menu">
+            <br>
+            <a href="#" th:href="@{/admin/ad/add}" class="teal active item">新增</a>
+            <a href="#" th:href="@{/admin/ad}" class="item">列表</a>
+        </div>
+    </div>
+</div>
+
+<!-- 中间内容 -->
+<div class="m-padded-tb-huge m-container">
+    <div class="ui container">
+        <form id="form-one" action="#" th:action="@{/admin/ad}" onsubmit="return formSubmit(this)" method="post" enctype="multipart/form-data" class="ui form">
+            <div class="ui segment">
+                <table cellspacing="10px">
+                    <tr>
+                        <div class="ui required field input">
+                            <td class="m-margin-top-mini">广告位Code：</td>
+                            <td>
+                                <select name="code" style="width: 150px;">
+                                    <option value="index-left">首页左侧</option>
+                                </select>
+                            </td>
+                            <td></td>
+                        </div>
+                    </tr>
+                    <tr>
+                        <td class="m-margin-top-mini">广告标题：</td>
+                        <td>
+                            <div class="ui required field input">
+                                <input type="text" name="title" th:value="${ad.title}" style="width: 300px;">
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="m-margin-top-mini">图片：</td>
+                        <td>
+                            <span style="line-height: 30px;"><b>*请选择一张广告图片*</b></span>
+                            <div class="">
+                                <input type="file" name="file" onchange="getFile(this)">
+                            </div>
+                        </td>
+                        <td>
+                            <img src="" width="300px" id="tx" th:src="${ad.imageUrl != null and ad.imageUrl != ''} ? @{/images/{path}(path=${ad.imageUrl})}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="m-margin-top-mini">跳转类型：</td>
+                        <td>
+                            <select name="actionType" style="width: 150px;">
+                                <option value="1" th:selected="${ad.actionType} == 1 ? 'selected'">当前窗口</option>
+                                <option value="2" th:selected="${ad.actionType} == 2 ? 'selected'">新增窗口</option>
+                            </select>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="m-margin-top-mini">跳转地址：</td>
+                        <td>
+                            <div class="ui required field input">
+                                <input type="text" name="actionValue" th:value="${ad.actionValue}" style="width: 300px;">
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="2">
+                            <button type="button" class="ui button" onclick="window.history.go(-1)">返回</button>
+                            <input class="ui teal button" type="submit" value="发布">
+                        </td>
+                    </tr>
+                </table>
+                <div class="ui error message"></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 底部 footer -->
+<footer th:replace="_fragment :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../../static/images/avatar.jpg" th:src="@{/images/avatar.jpg}"
+                             class="ui rounded image" alt="" style="width: 90px;">
+                    </div>
+                </div>
+            </div>
+            <div class="four wide column">
+                <h3 class="ui inverted header m-text-thin">最新兼职信息</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">用户故事 （User Story）</a>
+                    <a href="#" class="item">用户故事 （User Story）</a>
+                    <a href="#" class="item">用户故事 （User Story）</a>
+                </div>
+            </div>
+            <div class="five wide column">
+                <h3 class="ui inverted header m-text-thin">联系我</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">Email：chenbbion@outlook.com</a>
+                    <a href="#" class="item">QQ：361415506</a>
+                </div>
+            </div>
+            <div class="four wide column">
+                <h3 class="ui inverted header m-text-thin">广告投放</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item"> 详情及介绍 </a>
+                </div>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-opacity-mini">Copyright © 2020 - 2021 This part-time website Designed by ChenYicheng</p>
+    </div>
+</footer>
+<th:block th:replace="_fragment :: script">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</th:block>
+<script>
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+        on: 'hover'
+    });
+
+    function getFile(node) {
+        var array = new Array('jpg', 'jpeg', 'png'); //可以上传的文件类型
+        if (node.value == '') {
+            alert("选择要上传的文件!");
+            return false;
+        }
+        var fileContentType = node.value.match(/^(.*)(\.)(.{1,8})$/)[3];
+        var isExists = false;
+        for (var i in array) {
+            if (fileContentType.toLowerCase() == array[i].toLowerCase()) {
+                isExists = true;
+                var objUrl = getObjectURL(node.files[0]);
+                $('#tx').attr("src", objUrl);
+                return true;
+            }
+        }
+        if (isExists == false) {
+            node.value = null;
+            alert("上传文件类型不正确!");
+            return false;
+        }
+        return false;
+    }
+
+    function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+    function formSubmit(node) {
+        if(node.title.value.trim() == ''){
+            alert("请输入广告标题");
+            node.title.focus();
+            return false;
+        }
+
+        if(node.file.value == ''){
+            alert("请选择广告图片");
+            node.file.focus();
+            return false;
+        }
+
+        if(node.actionValue.value.trim() == ''){
+            alert("请输入跳转地址");
+            node.actionValue.focus()
+            return false;
+        }
+        return true;
+    }
+
+</script>
+</body>
+</html>

@@ -24,6 +24,11 @@ public class AdServiceImpl implements IAdService {
     }
 
     @Override
+    public Ad getAdById(Long id) {
+        return adDao.getAdById(id);
+    }
+
+    @Override
     public boolean insertAd(Ad ad) {
         return adDao.insertAd(ad);
     }

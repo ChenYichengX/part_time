@@ -16,13 +16,10 @@ Date: 2020-12-30 22:38:50
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for t_
-record
+-- Table structure for t_record
 -- ----------------------------
-DROP TABLE IF EXISTS `t_
-record`;
-CREATE TABLE `t_
-record` (
+DROP TABLE IF EXISTS `t_record`;
+CREATE TABLE `t_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `part_time_id` int(11) DEFAULT NULL COMMENT '兼职信息id',
   `user_id` int(11) DEFAULT NULL COMMENT '用户id',
@@ -32,6 +29,5 @@ record` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
--- Records of t_
-record
+-- Records of t_record
 -- ----------------------------

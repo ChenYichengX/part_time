@@ -1,9 +1,6 @@
 package com.chen.part_time.web;
 
-import com.chen.part_time.entity.Admin;
-import com.chen.part_time.entity.Apply;
 import com.chen.part_time.entity.User;
-import com.chen.part_time.service.IApplyService;
 import com.chen.part_time.service.IUserService;
 import com.chen.part_time.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.Random;
 
