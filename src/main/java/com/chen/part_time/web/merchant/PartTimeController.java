@@ -8,6 +8,7 @@ import com.chen.part_time.vo.TypeVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
@@ -316,13 +317,18 @@ public class PartTimeController {
         MerchantPartTime partTime = partTimeService.getPartTimeById(partTimeId);
         User merchant = userService.getUserByPart_time_id(partTimeId);
         User stu = userService.getUserById(stuId);
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setSubject("通知");
-        simpleMailMessage.setText("亲爱的" + stu.getNickName() + ",刚刚"+ merchant.getUsername() +
-                "的一个标题为 "+ partTime.getTitle() +" 的兼职选择您作为了兼职人，请尽快给他回复吧");
-        simpleMailMessage.setTo(stu.getEmail());
-        simpleMailMessage.setFrom("361415506@qq.com");
-        javaMailSender.send(simpleMailMessage);
+        try {
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setSubject("通知");
+            simpleMailMessage.setText("亲爱的" + stu.getNickName() + ",刚刚" + merchant.getUsername() +
+                    "的一个标题为 " + partTime.getTitle() + " 的兼职选择您作为了兼职人，请尽快给他回复吧");
+            simpleMailMessage.setTo(stu.getEmail());
+            simpleMailMessage.setFrom("361415506@qq.com");
+            javaMailSender.send(simpleMailMessage);
+        } catch (MailException e) {
+            e.printStackTrace();
+            return "error";
+        }
         return "success";
     }
 }

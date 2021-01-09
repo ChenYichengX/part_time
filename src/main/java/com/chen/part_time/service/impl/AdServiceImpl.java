@@ -34,6 +34,11 @@ public class AdServiceImpl implements IAdService {
     }
 
     @Override
+    public boolean updateAd(Ad ad) {
+        return adDao.updateAd(ad);
+    }
+
+    @Override
     public boolean deleteAdById(Long id) {
         return adDao.deleteAdById(id);
     }

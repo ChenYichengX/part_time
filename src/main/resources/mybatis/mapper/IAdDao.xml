@@ -47,4 +47,27 @@
         where delete_flag = 0
         and id = #{id}
     </select>
+
+    <!-- boolean updateAd(Ad); -->
+    <update id="updateAd">
+        update t_ad
+        <set>
+            <if test="code != null and code != ''">
+                ad_position_code = #{code},
+            </if>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="imageUrl != null and imageUrl != ''">
+                image_url = #{imageUrl},
+            </if>
+            <if test="actionType != null and actionType != ''">
+                action_type = #{actionType},
+            </if>
+            <if test="actionValue != null and actionValue != ''">
+                action_value = #{actionValue},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

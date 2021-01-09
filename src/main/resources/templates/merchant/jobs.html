@@ -45,33 +45,29 @@
             <div class="header">提示</div>
             <p th:text="${message}">恭喜，操作成功</p>
         </div>
-
         <div id="table-container">
             <div style="margin-top: 5px;" class="ui table" th:each="applyInfoVo : ${applys.list}">
                 <table style="width: 100%" cellspacing="0">
-                    <tr style="background-color: #f1f1f1">
+                    <tr style="background-color: #f1f1f1" class="center aligned">
                         <td>发布时间：<span th:text="${#dates.format(applyInfoVo.publishDate,'yyyy-MM-dd')}">2020-12-7</span> </td>
                         <td>标题：<span th:text="${applyInfoVo.title}">招外卖员</span></td>
                         <td>类型：<span th:text="${applyInfoVo.type_name}">外卖员</span></td>
                         <td>工资：<span th:text="${applyInfoVo.price}">2元/单</span></td>
-                        <td colspan="3">
+                        <td>
                             <a href="#" onclick="return deletePartTime(this)"
                                th:href="@{/merchant/partTime/{id}/delApply(id=${applyInfoVo.part_time_id})}"
                                class="ui mini red basic button">删除</a>
                         </td>
                     </tr>
                     <tbody>
-                        <tr class="trHover" th:each="applyStu : ${applyInfoVo.stus}">
+                        <tr class="center aligned trHover" style="height: 60px" th:each="applyStu : ${applyInfoVo.stus}">
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户：<span th:text="${applyStu.username}">xiaoming</span></td>
                             <td>申请时间：<span th:text="${#dates.format(applyStu.apply_time,'yyyy-MM-dd HH:mm:ss')}">2020-12-7 17:34:12</span></td>
                             <td>手机号：<span th:text="${applyStu.phone}">13048779806</span></td>
                             <td>
                                 <input type="hidden" name="stuId" th:value="${applyStu.student_id}">
-                            </td>
-                            <td>
                                 <input type="hidden" name="partTimeId" th:value="${applyInfoVo.part_time_id}">
                             </td>
-                            <td></td>
                             <td></td>
                         </tr>
                     </tbody>
@@ -213,10 +209,10 @@
     $(function () {
         $(".trHover").hover(function () {
             $(this).css("background-color","darkgray");
-            $(this).children("td").eq(6).html("<button class='ui button teal' onclick='choose(this)'>选择</button>");
+            $(this).children("td").eq(4).html("<button class='ui mini button teal' onclick='choose(this)'>选择</button>");
         },function () {
             $(this).css("background-color","white");
-            $(this).children("td").eq(6).html("");
+            $(this).children("td").eq(4).html("");
         });
     });
 

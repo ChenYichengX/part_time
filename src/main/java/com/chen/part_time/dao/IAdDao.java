@@ -27,6 +27,12 @@ public interface IAdDao {
     boolean insertAd(Ad ad);
 
     /**
+     * 修改
+     * @return
+     */
+    boolean updateAd(Ad ad);
+
+    /**
      * 删除广告通过 id
      * @param id
      * @return

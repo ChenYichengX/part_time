@@ -50,10 +50,13 @@
                 <table cellspacing="10px">
                     <tr>
                         <div class="ui required field input">
+                            <input type="hidden" name="id" th:value="${ad.id}">
                             <td class="m-margin-top-mini">广告位Code：</td>
                             <td>
                                 <select name="code" style="width: 150px;">
                                     <option value="index-left">首页左侧</option>
+<!--                                    <option value="type-left">分类页左侧</option>-->
+<!--                                    <option value="details-left">详情页左侧</option>-->
                                 </select>
                             </td>
                             <td></td>
