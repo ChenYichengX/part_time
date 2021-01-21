@@ -188,21 +188,20 @@
         var userName = $(node).parent().parent().children("td").eq(0).children("span").text();
         var b = confirm("确定选择用户为"+ userName +"该学生吗？");
         if(b){
-            alert("是");
             $.ajax({
                 url: "/merchant/choose",
                 data: {
-                    partTimeId:partTimeId,
+                    partTimeId: partTimeId,
                     stuId: stuId
                 },
                 success: function (ref) {
                     if(ref == "success"){
-
+                        alert('选择成功，已通知对方');
+                    }else{
+                        alert('通知失败，请联系管理员');
                     }
                 }
             })
-        }else{
-            alert("否");
         }
     }
 

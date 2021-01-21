@@ -58,11 +58,12 @@
         left join t_user u on u.id = p.user_id left join t_payment_type pay
         on pay.id = p.pay_id
         <where>
+            p.delete_type = 0
             <if test="title != null and title != ''">
-                title like '%' #{title} '%'
+                and title like '%' #{title} '%'
             </if>
             <if test="user_name != null and user_name != ''">
-                u.username like '%' #{user_name} '%'
+                and u.username like '%' #{user_name} '%'
             </if>
             <if test="type_id != null">
                 and type_id = #{type_id}
@@ -97,8 +98,9 @@
         left join t_user u on u.id = p.user_id left join t_payment_type pay
         on pay.id = p.pay_id
         <where>
+            p.delete_type = 0
             <if test="title != null and title != ''">
-                title like '%' #{title} '%'
+                and title like '%' #{title} '%'
             </if>
             <if test="user_name != null and user_name != ''">
                 or u.username like '%' #{user_name} '%'
@@ -149,9 +151,9 @@
     </update>
 
     <!-- boolean deletePartTime(Long id); -->
-    <delete id="deletePartTime">
-        delete from t_part_time where id = #{id}
-    </delete>
+    <update id="deletePartTime">
+        update t_part_time set delete_type = 1 where id = #{id}
+    </update>
 
     <!--    void addViewsById(Long id);-->
     <update id="addViewsById">
