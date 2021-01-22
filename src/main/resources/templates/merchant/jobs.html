@@ -183,8 +183,8 @@
     }
 
     function choose(node){
-        var stuId = $(node).parent().parent().children("td").eq(3).children("input").val();
-        var partTimeId = $(node).parent().parent().children("td").eq(4).children("input").val();
+        var stuId = $(node).parent().parent().children("td").eq(3).children("input").eq(0).val();
+        var partTimeId = $(node).parent().parent().children("td").eq(3).children("input").eq(1).val();
         var userName = $(node).parent().parent().children("td").eq(0).children("span").text();
         var b = confirm("确定选择用户为"+ userName +"该学生吗？");
         if(b){
