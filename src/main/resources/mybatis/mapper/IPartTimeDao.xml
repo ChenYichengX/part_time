@@ -108,6 +108,9 @@
             <if test="type_name != null">
                 or t.name like '%' #{type_name} '%'
             </if>
+            <if test="require_text != null">
+                or require_text like '%' #{require_text} '%'
+            </if>
             <if test="content != null">
                 or content = '%' #{content} '%'
             </if>

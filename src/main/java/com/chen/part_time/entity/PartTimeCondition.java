@@ -13,6 +13,15 @@ public class PartTimeCondition {
     private String user_name; // 用户名
     private String type_name; // 类型名
     private String content; // 内容
+    private String require_text; // 要求
+
+    public String getRequire_text() {
+        return require_text;
+    }
+
+    public void setRequire_text(String require_text) {
+        this.require_text = require_text;
+    }
 
     public String getType_name() {
         return type_name;

@@ -104,6 +104,7 @@ public class IndexController {
         part2.setUser_name(query);
         part2.setTitle(query);
         part2.setType_name(query);
+        part2.setRequire_text(query);
         PageHelper.startPage(pageNum, 4);
         List<MerchantPartTime> allPartTimeByView = partTimeService.getAllPartTimeByView(part2);
         PageInfo<MerchantPartTime> contentInfo = new PageInfo<>(allPartTimeByView, 5);
