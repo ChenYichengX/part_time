@@ -6,26 +6,26 @@
 
     <!--    boolean saveUnit(Unit Unit);-->
     <insert id="saveUnit">
-        insert into t_Unit(name) values(#{name})
+        insert into t_unit(name) values(#{name})
     </insert>
     <!--    Unit getUnit(Long id);-->
     <select id="getUnit" resultType="com.chen.part_time.entity.Unit">
-        select * from t_Unit where id = #{id}
+        select * from t_unit where id = #{id}
     </select>
     <!--    List<Unit> getAllUnit();-->
     <select id="getAllUnit" resultType="com.chen.part_time.entity.Unit">
-        select * from t_Unit
+        select * from t_unit
     </select>
     <!--    boolean updateUnit(Unit Unit);-->
     <update id="updateUnit">
-        update t_Unit set name = #{name} where id = #{id}
+        update t_unit set name = #{name} where id = #{id}
     </update>
     <!--    boolean deleteUnit(Long id);-->
     <delete id="deleteUnit">
-        delete from t_Unit where id = #{id}
+        delete from t_unit where id = #{id}
     </delete>
     <!--    Unit getUnitByName(String name);-->
     <select id="getUnitByName" resultType="com.chen.part_time.entity.Unit">
-        select * from t_Unit where name = #{name}
+        select * from t_unit where name = #{name}
     </select>
 </mapper>
