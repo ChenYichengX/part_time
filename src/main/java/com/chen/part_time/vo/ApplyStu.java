@@ -11,6 +11,33 @@ public class ApplyStu {
     private String username; // 用户名
     private Date apply_time; // 申请时间
     private String phone; // 电话
+    private Integer choose; // 已选择1、未选择0
+    private Date start_time; // 兼职开始时间
+    private Date over_time; // 兼职开始时间
+
+    public Date getStart_time() {
+        return start_time;
+    }
+
+    public void setStart_time(Date start_time) {
+        this.start_time = start_time;
+    }
+
+    public Date getOver_time() {
+        return over_time;
+    }
+
+    public void setOver_time(Date over_time) {
+        this.over_time = over_time;
+    }
+
+    public Integer getChoose() {
+        return choose;
+    }
+
+    public void setChoose(Integer choose) {
+        this.choose = choose;
+    }
 
     public Long getStudent_id() {
         return student_id;

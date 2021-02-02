@@ -18,6 +18,7 @@
             <result property="username" column="username"></result>
             <result property="apply_time" column="apply_time"></result>
             <result property="phone" column="phone"></result>
+            <result property="choose" column="choose"></result>
         </collection>
     </resultMap>
 
@@ -48,11 +49,19 @@
             a.`user_id` AS student_id,
             u.`username`,
             u.`phone`,
-            a.`apply_time`
+            a.`apply_time`,
+            a.choose,
+            a.start_time,
+            a.over_time
         FROM
             t_part_time p LEFT JOIN t_type t ON p.`type_id`=t.`id`
             LEFT JOIN t_apply_part_time a ON p.`id` = a.`part_time_id`
             LEFT JOIN t_user u ON a.`user_id` = u.`id`
         WHERE p.user_id = #{user_id} AND a.`user_id` IS NOT NULL
     </select>
+
+    <!-- boolean updateStuChoose(@Param("userId") Long userId, @Param("partTimeId") Long partTimeId); -->
+    <update id="updateStuChoose">
+        update t_apply_part_time set choose = 1 where user_id = #{userId} and part_time_id = #{partTimeId}
+    </update>
 </mapper>

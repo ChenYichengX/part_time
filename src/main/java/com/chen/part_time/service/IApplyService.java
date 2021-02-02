@@ -23,4 +23,7 @@ public interface IApplyService {
 
     // 查询申请记录（给商家显示）
     List<ApplyInfoVo> getApplyInfoByUser_id(Long user_id);
+
+    // 将学生的选择状态改为1
+    boolean updateStuChoose(Long userId,Long partTimeId);
 }

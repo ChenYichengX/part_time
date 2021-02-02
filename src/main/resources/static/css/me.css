@@ -148,10 +148,6 @@ body{
     }
 }
 
-
-.tr_hover :hover{
-    background-color: darkgray;
-}
 /*广告位*/
 #Ad{
     position: fixed;

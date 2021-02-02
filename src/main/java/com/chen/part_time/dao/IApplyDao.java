@@ -3,6 +3,7 @@ package com.chen.part_time.dao;
 import com.chen.part_time.entity.Apply;
 import com.chen.part_time.vo.ApplyInfoVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,4 +25,7 @@ public interface IApplyDao {
 
     // 查询申请记录（给商家显示）
     List<ApplyInfoVo> getApplyInfoByUser_id(Long user_id);
+
+    // 将学生的选择状态改为1
+    boolean updateStuChoose(@Param("userId") Long userId, @Param("partTimeId") Long partTimeId);
 }

@@ -12,10 +12,8 @@
     <div class="ui container">
         <div class="ui inverted secondary stackable menu">
             <h2 class="ui teal header item">商家管理</h2>
-            <a href="#" th:href="@{/merchant/partTimes}" class="m-item item m-mobile-hide"><i
-                    class="home icon"></i>兼职信息</a>
-            <a href="#" th:href="@{/merchant/apply}" class="active m-item item m-mobile-hide"><i
-                    class="file icon"></i>申请记录</a>
+            <a href="#" th:href="@{/merchant/partTimes}" class="m-item item m-mobile-hide"><i class="home icon"></i>兼职信息</a>
+            <a href="#" th:href="@{/merchant/apply}" class="active m-item item m-mobile-hide"><i class="file icon"></i>申请记录</a>
             <div class="right m-item menu m-mobile-hide">
                 <div class="ui dropdown item">
                     <div class="text">
@@ -49,7 +47,8 @@
             <div style="margin-top: 5px;" class="ui table" th:each="applyInfoVo : ${applys.list}">
                 <table style="width: 100%" cellspacing="0">
                     <tr style="background-color: #f1f1f1" class="center aligned">
-                        <td>发布时间：<span th:text="${#dates.format(applyInfoVo.publishDate,'yyyy-MM-dd')}">2020-12-7</span> </td>
+                        <td>发布时间：<span th:text="${#dates.format(applyInfoVo.publishDate,'yyyy-MM-dd')}">2020-12-7</span>
+                        </td>
                         <td>标题：<span th:text="${applyInfoVo.title}">招外卖员</span></td>
                         <td>类型：<span th:text="${applyInfoVo.type_name}">外卖员</span></td>
                         <td>工资：<span th:text="${applyInfoVo.price}">2元/单</span></td>
@@ -59,18 +58,19 @@
                                class="ui mini red basic button">删除</a>
                         </td>
                     </tr>
-                    <tbody>
-                        <tr class="center aligned trHover" style="height: 60px" th:each="applyStu : ${applyInfoVo.stus}">
-                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户：<span th:text="${applyStu.username}">xiaoming</span></td>
-                            <td>申请时间：<span th:text="${#dates.format(applyStu.apply_time,'yyyy-MM-dd HH:mm:ss')}">2020-12-7 17:34:12</span></td>
-                            <td>手机号：<span th:text="${applyStu.phone}">13048779806</span></td>
-                            <td>
-                                <input type="hidden" name="stuId" th:value="${applyStu.student_id}">
-                                <input type="hidden" name="partTimeId" th:value="${applyInfoVo.part_time_id}">
-                            </td>
-                            <td></td>
-                        </tr>
-                    </tbody>
+                    <tr class="center aligned" style="height: 60px" th:each="applyStu : ${applyInfoVo.stus}"
+                        th:classappend="${applyStu.choose == 0} ? 'trHover'">
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户：<span th:text="${applyStu.username}">xiaoming</span>
+                        </td>
+                        <td>申请时间：<span th:text="${#dates.format(applyStu.apply_time,'yyyy-MM-dd HH:mm:ss')}">2020-12-7 17:34:12</span>
+                        </td>
+                        <td>手机号：<span th:text="${applyStu.phone}">13048779806</span></td>
+                        <td>
+                            <input type="hidden" name="stuId" th:value="${applyStu.student_id}">
+                            <input type="hidden" name="partTimeId" th:value="${applyInfoVo.part_time_id}">
+                        </td>
+                        <td></td>
+                    </tr>
                 </table>
             </div>
             <div th:if="${#lists.isEmpty(applys.list)}"><h1>无申请记录</h1></div>
@@ -86,10 +86,14 @@
                         <span th:text="${applys.pages}"></span>]&nbsp;&nbsp;
                     </span>
                     <a onclick="page(this)" th:attr="data-page=1" th:unless="${applys.isFirstPage}" class="item">首页</a>
-                    <a onclick="page(this)" th:attr="data-page=${applys.prePage}" th:unless="${applys.isFirstPage}" class="item">上一页</a>
-                    <a onclick="page(this)" th:attr="data-page=${num}" th:each="num : ${applys.navigatepageNums}" th:text="${num}" class="item" th:classappend="${applys.pageNum == num} ? 'active'"></a>
-                    <a onclick="page(this)" th:attr="data-page=${applys.nextPage}" th:unless="${applys.isLastPage}" class="item">下一页</a>
-                    <a onclick="page(this)" th:attr="data-page=${applys.pages}" th:unless="${applys.isLastPage}" class="item">末页</a>
+                    <a onclick="page(this)" th:attr="data-page=${applys.prePage}" th:unless="${applys.isFirstPage}"
+                       class="item">上一页</a>
+                    <a onclick="page(this)" th:attr="data-page=${num}" th:each="num : ${applys.navigatepageNums}"
+                       th:text="${num}" class="item" th:classappend="${applys.pageNum == num} ? 'active'"></a>
+                    <a onclick="page(this)" th:attr="data-page=${applys.nextPage}" th:unless="${applys.isLastPage}"
+                       class="item">下一页</a>
+                    <a onclick="page(this)" th:attr="data-page=${applys.pages}" th:unless="${applys.isLastPage}"
+                       class="item">末页</a>
                 </div>
             </div>
         </div>
@@ -140,8 +144,8 @@
     </div>
 </footer>
 <th:block th:replace="_fragment :: script">
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 </th:block>
 <script>
     $('.menu.toggle').click(function () {
@@ -171,8 +175,9 @@
             page: $("[name='page']").val()
         });
     }
+
     //消息提示关闭初始化
-    $('.close').on('click',function () {
+    $('.close').on('click', function () {
         $(this).closest('.message').transition('fade');
     });
 
@@ -182,12 +187,13 @@
         return b;
     }
 
-    function choose(node){
+    function choose(node) {
         var stuId = $(node).parent().parent().children("td").eq(3).children("input").eq(0).val();
         var partTimeId = $(node).parent().parent().children("td").eq(3).children("input").eq(1).val();
         var userName = $(node).parent().parent().children("td").eq(0).children("span").text();
-        var b = confirm("确定选择用户为"+ userName +"该学生吗？");
-        if(b){
+        var b = confirm("确定选择用户为" + userName + "该学生吗？");
+        console.log(node);
+        if (b) {
             $.ajax({
                 url: "/merchant/choose",
                 data: {
@@ -195,9 +201,12 @@
                     stuId: stuId
                 },
                 success: function (ref) {
-                    if(ref == "success"){
+                    if (ref == "success") {
                         alert('选择成功，已通知对方');
-                    }else{
+                        $(node).parent().parent().css("background-color", "white");
+                        $(node).parent().parent().children("td").eq(4).html("");
+                        $(node).parent().parent().unbind("mouseenter mouseleave");
+                    } else {
                         alert('通知失败，请联系管理员');
                     }
                 }
@@ -207,10 +216,10 @@
 
     $(function () {
         $(".trHover").hover(function () {
-            $(this).css("background-color","darkgray");
+            $(this).css("background-color", "darkgray");
             $(this).children("td").eq(4).html("<button class='ui mini button teal' onclick='choose(this)'>选择</button>");
-        },function () {
-            $(this).css("background-color","white");
+        }, function () {
+            $(this).css("background-color", "white");
             $(this).children("td").eq(4).html("");
         });
     });

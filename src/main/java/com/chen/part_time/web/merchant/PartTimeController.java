@@ -313,7 +313,6 @@ public class PartTimeController {
     @GetMapping("/choose")
     @ResponseBody
     public String choose(Long partTimeId,Long stuId){
-        System.out.println(partTimeId + "---------" +stuId);
         MerchantPartTime partTime = partTimeService.getPartTimeById(partTimeId);
         User merchant = userService.getUserByPart_time_id(partTimeId);
         User stu = userService.getUserById(stuId);
@@ -325,6 +324,9 @@ public class PartTimeController {
             simpleMailMessage.setTo(stu.getEmail());
             simpleMailMessage.setFrom("361415506@qq.com");
             javaMailSender.send(simpleMailMessage);
+
+            // 将选择表中的选择状态改为 1
+            applyService.updateStuChoose(stuId, partTimeId);
         } catch (MailException e) {
             e.printStackTrace();
             return "error";

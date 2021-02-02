@@ -24,6 +24,9 @@ CREATE TABLE `t_apply_part_time` (
   `part_time_id` int(11) DEFAULT NULL COMMENT '兼职信息id',
   `user_id` int(11) DEFAULT NULL COMMENT '用户id',
   `apply_time` timestamp NULL DEFAULT NULL COMMENT '申请时间',
+  `choose` int(2) DEFAULT '0' COMMENT '已选择1、未选择0',
+  `start_time` timestamp NULL DEFAULT NULL COMMENT '兼职开始时间',
+  `over_time` timestamp NULL DEFAULT NULL COMMENT '兼职结束时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

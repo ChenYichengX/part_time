@@ -37,4 +37,9 @@ public class ApplyServiceImpl implements IApplyService {
     public List<ApplyInfoVo> getApplyInfoByUser_id(Long user_id) {
         return applyDao.getApplyInfoByUser_id(user_id);
     }
+
+    @Override
+    public boolean updateStuChoose(Long userId,Long partTimeId) {
+        return applyDao.updateStuChoose(userId,partTimeId);
+    }
 }

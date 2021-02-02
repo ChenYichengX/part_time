@@ -12,6 +12,9 @@ public class Apply {
     private Long part_time_id; // 兼职信息 id
     private Long user_id; // 用户 id
     private Date apply_time; // 申请时间
+    private Integer choose; // 已选择1、未选择0
+    private Date start_time; // 兼职开始时间
+    private Date over_time; // 兼职结束时间
 
     public Apply() {
     }
@@ -25,6 +28,30 @@ public class Apply {
         this.part_time_id = part_time_id;
         this.user_id = user_id;
         this.apply_time = apply_time;
+    }
+
+    public Date getStart_time() {
+        return start_time;
+    }
+
+    public void setStart_time(Date start_time) {
+        this.start_time = start_time;
+    }
+
+    public Date getOver_time() {
+        return over_time;
+    }
+
+    public void setOver_time(Date over_time) {
+        this.over_time = over_time;
+    }
+
+    public Integer getChoose() {
+        return choose;
+    }
+
+    public void setChoose(Integer choose) {
+        this.choose = choose;
     }
 
     public Date getApply_time() {
