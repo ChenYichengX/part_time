@@ -25,5 +25,5 @@ public interface IApplyService {
     List<ApplyInfoVo> getApplyInfoByUser_id(Long user_id);
 
     // 将学生的选择状态改为1
-    boolean updateStuChoose(Long userId,Long partTimeId);
+    boolean updateStuChoose(Apply apply);
 }

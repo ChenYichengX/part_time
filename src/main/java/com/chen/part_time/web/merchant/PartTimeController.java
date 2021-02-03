@@ -312,25 +312,38 @@ public class PartTimeController {
 
     @GetMapping("/choose")
     @ResponseBody
-    public String choose(Long partTimeId,Long stuId){
-        MerchantPartTime partTime = partTimeService.getPartTimeById(partTimeId);
+    public String choose(Long partTimeId,Long stuId,String stuName,String partTimeName){
         User merchant = userService.getUserByPart_time_id(partTimeId);
         User stu = userService.getUserById(stuId);
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
             simpleMailMessage.setSubject("通知");
-            simpleMailMessage.setText("亲爱的" + stu.getNickName() + ",刚刚" + merchant.getUsername() +
-                    "的一个标题为 " + partTime.getTitle() + " 的兼职选择您作为了兼职人，请尽快给他回复吧");
+            simpleMailMessage.setText("亲爱的" + stuName + ",刚刚" + merchant.getUsername() +
+                    "的一个标题为 " + partTimeName + " 的兼职选择您作为了兼职人，请尽快给他回复吧");
             simpleMailMessage.setTo(stu.getEmail());
             simpleMailMessage.setFrom("361415506@qq.com");
             javaMailSender.send(simpleMailMessage);
 
-            // 将选择表中的选择状态改为 1
-            applyService.updateStuChoose(stuId, partTimeId);
+            // 将选择表中的选择状态改为 CHOOSE_SELECTED
+            Apply apply = new Apply(partTimeId, stuId);
+            apply.setChoose(Apply.CHOOSE_SELECTED);
+            applyService.updateStuChoose(apply);
         } catch (MailException e) {
             e.printStackTrace();
             return "error";
         }
         return "success";
+    }
+
+    @GetMapping("/start")
+    @ResponseBody
+    public String startJob(Long partTimeId,Long stuId) {
+        // 将选择表中的选择状态改为 CHOOSE_STARTED
+        Apply apply = new Apply(partTimeId, stuId);
+        apply.setChoose(Apply.CHOOSE_STARTED);
+        apply.setStart_time(new Date());
+        applyService.updateStuChoose(apply);
+
+        return "";
     }
 }

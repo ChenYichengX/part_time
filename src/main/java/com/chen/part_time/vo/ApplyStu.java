@@ -11,7 +11,7 @@ public class ApplyStu {
     private String username; // 用户名
     private Date apply_time; // 申请时间
     private String phone; // 电话
-    private Integer choose; // 已选择1、未选择0
+    private Integer choose; // 未选择0、已选择1、开始兼职2、结束兼职3
     private Date start_time; // 兼职开始时间
     private Date over_time; // 兼职开始时间
 

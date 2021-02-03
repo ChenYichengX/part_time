@@ -68,8 +68,12 @@
                         <td>
                             <input type="hidden" name="stuId" th:value="${applyStu.student_id}">
                             <input type="hidden" name="partTimeId" th:value="${applyInfoVo.part_time_id}">
+                            <button class='ui mini button teal' th:if="${applyStu.choose} == 1" onclick='startJob()'>开始兼职</button>
+                            <div th:if="${applyStu.choose} == 2">开始时间：<span th:text="${#dates.format(applyStu.start_time,'yyyy-MM-dd HH:mm:ss')}">2020-12-7 17:34:12</span></div>
                         </td>
-                        <td></td>
+                        <td>
+                            <div th:if="${applyStu.choose} == 3">结束时间：<span th:text="${#dates.format(applyStu.over_time,'yyyy-MM-dd HH:mm:ss')}">2020-12-7 17:34:12</span></div>
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -189,16 +193,19 @@
 
     function choose(node) {
         var stuId = $(node).parent().parent().children("td").eq(3).children("input").eq(0).val();
+        var stuName = $(node).parent().parent().children("td").eq(0).children("span").text();
+        var partTimeName = $(node).parent().parent().parent().children("tr").eq(0).children("td").eq(1).children("span").text();
         var partTimeId = $(node).parent().parent().children("td").eq(3).children("input").eq(1).val();
         var userName = $(node).parent().parent().children("td").eq(0).children("span").text();
         var b = confirm("确定选择用户为" + userName + "该学生吗？");
-        console.log(node);
         if (b) {
             $.ajax({
                 url: "/merchant/choose",
                 data: {
                     partTimeId: partTimeId,
-                    stuId: stuId
+                    stuId: stuId,
+                    stuName: stuName,
+                    partTimeName: partTimeName
                 },
                 success: function (ref) {
                     if (ref == "success") {
@@ -206,11 +213,32 @@
                         $(node).parent().parent().css("background-color", "white");
                         $(node).parent().parent().children("td").eq(4).html("");
                         $(node).parent().parent().unbind("mouseenter mouseleave");
+                        $(node).parent().parent().children("td").eq(3).append("<button class='ui mini button teal' onclick='startJob(this)'>开始兼职</button>")
                     } else {
                         alert('通知失败，请联系管理员');
                     }
                 }
             })
+        }
+    }
+
+    function startJob(node) {
+        var stuId = $(node).parent().parent().children("td").eq(3).children("input").eq(0).val();
+        var partTimeId = $(node).parent().parent().children("td").eq(3).children("input").eq(1).val();
+        var userName = $(node).parent().parent().children("td").eq(0).children("span").text();
+        var b = confirm("确定用户为" + userName + "该学生开始兼职吗？");
+        console.log(node);
+        if(b){
+            $.ajax({
+                url: '/merchant/start',
+                data: {
+                    partTimeId: partTimeId,
+                    stuId: stuId
+                },
+                success: function (ref) {
+
+                }
+            });
         }
     }
 

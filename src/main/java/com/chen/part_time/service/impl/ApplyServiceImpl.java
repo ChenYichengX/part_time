@@ -39,7 +39,7 @@ public class ApplyServiceImpl implements IApplyService {
     }
 
     @Override
-    public boolean updateStuChoose(Long userId,Long partTimeId) {
-        return applyDao.updateStuChoose(userId,partTimeId);
+    public boolean updateStuChoose(Apply apply) {
+        return applyDao.updateStuChoose(apply);
     }
 }

@@ -12,9 +12,14 @@ public class Apply {
     private Long part_time_id; // 兼职信息 id
     private Long user_id; // 用户 id
     private Date apply_time; // 申请时间
-    private Integer choose; // 已选择1、未选择0
+    private Integer choose; // 未选择0、已选择1、开始兼职2、结束兼职3
     private Date start_time; // 兼职开始时间
     private Date over_time; // 兼职结束时间
+
+    public static final Integer CHOOSE_UNSELECTED = 0;
+    public static final Integer CHOOSE_SELECTED = 1;
+    public static final Integer CHOOSE_STARTED = 2;
+    public static final Integer CHOOSE_OVER = 3;
 
     public Apply() {
     }

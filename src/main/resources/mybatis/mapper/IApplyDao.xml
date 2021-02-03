@@ -60,8 +60,20 @@
         WHERE p.user_id = #{user_id} AND a.`user_id` IS NOT NULL
     </select>
 
-    <!-- boolean updateStuChoose(@Param("userId") Long userId, @Param("partTimeId") Long partTimeId); -->
+    <!-- boolean updateStuChoose(Apply apply); -->
     <update id="updateStuChoose">
-        update t_apply_part_time set choose = 1 where user_id = #{userId} and part_time_id = #{partTimeId}
+        update t_apply_part_time
+        <set>
+            <if test="choose != null">
+                choose = #{choose},
+            </if>
+            <if test="start_time != null">
+                start_time = #{start_time},
+            </if>
+            <if test="over_time != null">
+                over_time = #{over_time},
+            </if>
+        </set>
+        where user_id = #{user_id} and part_time_id = #{part_time_id}
     </update>
 </mapper>
