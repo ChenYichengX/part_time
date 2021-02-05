@@ -162,4 +162,9 @@
     <update id="addViewsById">
         update t_part_time set views = views + 1 where id = #{id}
     </update>
+
+    <!--    boolean updateDoing(@Param("id") Long id, @Param("type") Integer type);-->
+    <update id="updateDoing">
+        update t_part_time set doing = #{type} where id = #{id}
+    </update>
 </mapper>

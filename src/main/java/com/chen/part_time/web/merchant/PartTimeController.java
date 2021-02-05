@@ -52,10 +52,10 @@ public class PartTimeController {
 
     private String basePath = ""; // 图片的基路径
 
-    public PartTimeController(){
+    public PartTimeController() {
         try {
             String path = ResourceUtils.getURL("classpath:").getPath() + "static/images";
-            String realPath = path.replace("/","\\").substring(1,path.length());
+            String realPath = path.replace("/", "\\").substring(1, path.length());
 //            System.out.println(realPath); // D:\gitRep\part_time\target\classes\static\images
             basePath = realPath;
         } catch (FileNotFoundException e) {
@@ -82,7 +82,7 @@ public class PartTimeController {
     }
 
     @PostMapping("partTimes/search")
-    public String search(@RequestParam(required = false) Integer page, String title, Long typeId, Model model,HttpSession session) {
+    public String search(@RequestParam(required = false) Integer page, String title, Long typeId, Model model, HttpSession session) {
         int pageNum = 1;
         if (page != null && page != 0) {
             pageNum = page;
@@ -100,6 +100,7 @@ public class PartTimeController {
 
     /**
      * 去新增页面
+     *
      * @param model
      * @return
      */
@@ -116,6 +117,7 @@ public class PartTimeController {
 
     /**
      * 去修改页面
+     *
      * @param model
      * @return
      */
@@ -136,6 +138,7 @@ public class PartTimeController {
 
     /**
      * 新增和修改同一个方法
+     *
      * @param partTime
      * @param price
      * @param unit
@@ -173,7 +176,7 @@ public class PartTimeController {
                 // 重新写一个 update 方法,不修改 firstPicture 值
                 b = partTimeService.updatePartTimeNoPicture(partTime);
             } else { // 上传了新的图片
-                File srcFile = new File(basePath,partTime.getFirstPicture());
+                File srcFile = new File(basePath, partTime.getFirstPicture());
                 srcFile.delete(); // 删掉之前的图片
                 String filename = pictureFileUpload(file, user); // 将图片上传并返回处理后的文件名
                 partTime.setFirstPicture(filename);
@@ -206,13 +209,14 @@ public class PartTimeController {
     /**
      * 将图片上传到服务器的 static/images 目录下
      * 并返回处理过后的文件名
+     *
      * @param file
      * @param user
      * @return
      */
     private String pictureFileUpload(MultipartFile file, User user) {
         String filename = user.getUsername() + UUID.randomUUID().toString().substring(0, 5) + new Date().getTime() + "_" + file.getOriginalFilename();
-        File picture = new File(basePath,filename);
+        File picture = new File(basePath, filename);
         try {
             file.transferTo(picture);
         } catch (IOException e) {
@@ -223,103 +227,140 @@ public class PartTimeController {
 
     /**
      * 删除
+     *
      * @param id
      * @param attributes
      * @return
      */
     @GetMapping("/partTime/{id}/delete")
-    public String deleteFile(@PathVariable Long id, RedirectAttributes attributes){
-        MerchantPartTime partTime = partTimeService.getPartTimeById(id);
-        if(partTime == null){ // 不存在
-            attributes.addFlashAttribute("message","删除失败，该兼职信息不存在");
-            return "redirect:/merchant/partTimes";
+    public String deleteFile(@PathVariable Long id, RedirectAttributes attributes, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User merchant = (User) session.getAttribute("user");
+        PartTimeCondition partTimeCondition = new PartTimeCondition();
+        partTimeCondition.setUser_id(merchant.getId());
+        List<MerchantPartTime> allPartTime = partTimeService.getAllPartTime(partTimeCondition);
+        for (MerchantPartTime merchantPartTime : allPartTime) {
+            if (merchantPartTime.getId().equals(id)) {
+                // 删除图片
+                File picture = new File(basePath, merchantPartTime.getFirstPicture());
+                picture.delete();
+                // 删除数据库的记录
+                boolean b = partTimeService.deletePartTime(id);
+                if (b) {
+                    attributes.addFlashAttribute("message", "删除成功");
+                } else {
+                    attributes.addFlashAttribute("message", "删除失败");
+                }
+                return "redirect:/merchant/partTimes";
+            }
         }
-        // 删除图片
-        File picture = new File(basePath,partTime.getFirstPicture());
-        picture.delete();
-        // 删除数据库的记录
-        boolean b = partTimeService.deletePartTime(id);
-        if(b){
-            attributes.addFlashAttribute("message","删除成功");
-        }else{
-            attributes.addFlashAttribute("message","删除失败");
-        }
+        attributes.addFlashAttribute("message", "删除失败，该兼职信息不存在");
         return "redirect:/merchant/partTimes";
     }
 
     /**
      * 查看申请记录
+     *
      * @param request
      * @param model
      * @return
      */
     @GetMapping("/apply")
-    public String applyRecord(HttpServletRequest request,Model model){
+    public String applyRecord(@RequestParam(required = false) Integer page,HttpServletRequest request, Model model) {
+        int pageNum = 1;
+        if (page != null && page != 0) {
+            pageNum = page;
+        }
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        PageHelper.startPage(1,3);
+        PageHelper.startPage(pageNum, 5);
         List<ApplyInfoVo> applyInfoByUser_id = applyService.getApplyInfoByUser_id(user.getId());
-        PageInfo<ApplyInfoVo> pageInfo = new PageInfo(applyInfoByUser_id,5);
-        model.addAttribute("applys",pageInfo);
+        PageInfo<ApplyInfoVo> pageInfo = new PageInfo(applyInfoByUser_id, 5);
+        model.addAttribute("applys", pageInfo);
         for (ApplyInfoVo applyInfoVo : applyInfoByUser_id) {
             System.out.println(applyInfoVo);
         }
         return "merchant/jobs";
     }
 
+    @PostMapping("/apply/search")
+    public String applyRecordSearch(@RequestParam(required = false) Integer page,HttpServletRequest request, Model model) {
+        int pageNum = 1;
+        if (page != null && page != 0) {
+            pageNum = page;
+        }
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        PageHelper.startPage(pageNum, 5);
+        List<ApplyInfoVo> applyInfoByUser_id = applyService.getApplyInfoByUser_id(user.getId());
+        PageInfo<ApplyInfoVo> pageInfo = new PageInfo(applyInfoByUser_id, 5);
+        model.addAttribute("applys", pageInfo);
+        for (ApplyInfoVo applyInfoVo : applyInfoByUser_id) {
+            System.out.println(applyInfoVo);
+        }
+        return "merchant/jobs :: applyList";
+    }
+
     /**
      * 删除有人申请的兼职信息,并通知申请人
+     *
      * @param id
      * @param attributes
      * @return
      */
     @GetMapping("/partTime/{id}/delApply")
-    public String deleteFileAndApply(@PathVariable Long id, RedirectAttributes attributes,HttpServletRequest request){
-        MerchantPartTime partTime = partTimeService.getPartTimeById(id);
-        if(partTime == null){ // 不存在
-            attributes.addFlashAttribute("message","删除失败，该兼职信息不存在");
-            return "redirect:/merchant/apply";
-        }
-        // 删除图片
-        File picture = new File(basePath,partTime.getFirstPicture());
-        picture.delete();
+    public String deleteFileAndApply(@PathVariable Long id, RedirectAttributes attributes, HttpServletRequest request) {
         // 获取商家信息
         HttpSession session = request.getSession();
         User merchant = (User) session.getAttribute("user");
-        // 获取所有申请人的信息
-        List<User> stus = userService.getUsersByPart_time_id(id);
-        // 发送通知
-        for (User user : stus) {
-            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setSubject("通知");
-            simpleMailMessage.setText("亲爱的" + user.getNickName() + ",刚刚"+ merchant.getUsername() +"删除了标题为"+partTime.getTitle()+",类型为" +
-                    partTime.getType_name() +"的兼职信息,您的申请已无效{{{(>_<)}}},快去看看又有哪些新的兼职吧");
-            simpleMailMessage.setTo(user.getEmail());
-            simpleMailMessage.setFrom("361415506@qq.com");
-            javaMailSender.send(simpleMailMessage);
+
+        PartTimeCondition partTimeCondition = new PartTimeCondition();
+        partTimeCondition.setUser_id(merchant.getId());
+        List<MerchantPartTime> allPartTime = partTimeService.getAllPartTime(partTimeCondition);
+        for (MerchantPartTime merchantPartTime : allPartTime) {
+            if (merchantPartTime.getId().equals(id)) {
+                // 删除图片
+                File picture = new File(basePath, merchantPartTime.getFirstPicture());
+                picture.delete();
+                // 获取所有申请人的信息
+                List<User> stus = userService.getUsersByPart_time_id(id);
+                // 发送通知
+                for (User user : stus) {
+                    SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+                    simpleMailMessage.setSubject("通知");
+                    simpleMailMessage.setText("亲爱的" + user.getNickName() + ",刚刚" + merchant.getUsername() + "删除了标题为" + merchantPartTime.getTitle() + ",类型为" +
+                            merchantPartTime.getType_name() + "的兼职信息,您的申请已无效{{{(>_<)}}},快去看看又有哪些新的兼职吧");
+                    simpleMailMessage.setTo(user.getEmail());
+                    simpleMailMessage.setFrom("361415506@qq.com");
+                    javaMailSender.send(simpleMailMessage);
+                }
+                // 删除申请记录
+                applyService.deleteOtherApply(new Apply(id, null));
+                // 删除数据库的记录
+                boolean b = partTimeService.deletePartTime(id);
+                if (b) {
+                    attributes.addFlashAttribute("message", "删除成功");
+                } else {
+                    attributes.addFlashAttribute("message", "删除失败");
+                }
+                return "redirect:/merchant/apply";
+            }
         }
-        // 删除申请记录
-        applyService.deleteOtherApply(new Apply(id, null));
-        // 删除数据库的记录
-        boolean b = partTimeService.deletePartTime(id);
-        if(b){
-            attributes.addFlashAttribute("message","删除成功");
-        }else{
-            attributes.addFlashAttribute("message","删除失败");
-        }
+        attributes.addFlashAttribute("message", "删除失败，该兼职信息不存在");
         return "redirect:/merchant/apply";
     }
 
     @GetMapping("/choose")
     @ResponseBody
-    public String choose(Long partTimeId,Long stuId,String stuName,String partTimeName){
-        User merchant = userService.getUserByPart_time_id(partTimeId);
+    public String choose(Long partTimeId, Long stuId, String partTimeName, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User merchant = (User) session.getAttribute("user"); // 当前用户
         User stu = userService.getUserById(stuId);
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
             simpleMailMessage.setSubject("通知");
-            simpleMailMessage.setText("亲爱的" + stuName + ",刚刚" + merchant.getUsername() +
-                    "的一个标题为 " + partTimeName + " 的兼职选择您作为了兼职人，请尽快给他回复吧");
+            simpleMailMessage.setText("亲爱的" + stu.getUsername() + ",刚刚商家" + merchant.getUsername() +
+                    "的一个标题为 ’" + partTimeName + "‘ 的兼职选择您作为了兼职人，请尽快给他回复吧");
             simpleMailMessage.setTo(stu.getEmail());
             simpleMailMessage.setFrom("361415506@qq.com");
             javaMailSender.send(simpleMailMessage);
@@ -328,6 +369,9 @@ public class PartTimeController {
             Apply apply = new Apply(partTimeId, stuId);
             apply.setChoose(Apply.CHOOSE_SELECTED);
             applyService.updateStuChoose(apply);
+
+            // 将兼职信息状态更新为 1（已兼职状态）
+            partTimeService.updateDoing(partTimeId,PartTime.DOING_PART_TIME);
         } catch (MailException e) {
             e.printStackTrace();
             return "error";
@@ -337,13 +381,49 @@ public class PartTimeController {
 
     @GetMapping("/start")
     @ResponseBody
-    public String startJob(Long partTimeId,Long stuId) {
-        // 将选择表中的选择状态改为 CHOOSE_STARTED
-        Apply apply = new Apply(partTimeId, stuId);
-        apply.setChoose(Apply.CHOOSE_STARTED);
-        apply.setStart_time(new Date());
-        applyService.updateStuChoose(apply);
+    public String startJob(Long partTimeId, Long stuId, String partTimeName) {
+        User stu = userService.getUserById(stuId);
+        try {
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setSubject("通知");
+            simpleMailMessage.setText("亲爱的" + stu.getUsername() + ",您的’" + partTimeName + "‘兼职已经开始。");
+            simpleMailMessage.setTo(stu.getEmail());
+            simpleMailMessage.setFrom("361415506@qq.com");
+            javaMailSender.send(simpleMailMessage);
 
-        return "";
+            // 将选择表中的选择状态改为 CHOOSE_STARTED
+            Apply apply = new Apply(partTimeId, stuId);
+            apply.setChoose(Apply.CHOOSE_STARTED);
+            apply.setStart_time(new Date());
+            applyService.updateStuChoose(apply);
+        } catch (MailException e) {
+            e.printStackTrace();
+            return "error";
+        }
+        return "success";
+    }
+
+    @GetMapping("/over")
+    @ResponseBody
+    public String overJob(Long partTimeId, Long stuId, String partTimeName) {
+        User stu = userService.getUserById(stuId);
+        try {
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setSubject("通知");
+            simpleMailMessage.setText("亲爱的" + stu.getUsername() + ",您的’" + partTimeName + "‘兼职已经结束。");
+            simpleMailMessage.setTo(stu.getEmail());
+            simpleMailMessage.setFrom("361415506@qq.com");
+            javaMailSender.send(simpleMailMessage);
+
+            // 将选择表中的选择状态改为 CHOOSE_OVER
+            Apply apply = new Apply(partTimeId, stuId);
+            apply.setChoose(Apply.CHOOSE_OVER);
+            apply.setOver_time(new Date());
+            applyService.updateStuChoose(apply);
+        } catch (MailException e) {
+            e.printStackTrace();
+            return "error";
+        }
+        return "success";
     }
 }

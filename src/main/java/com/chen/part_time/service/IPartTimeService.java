@@ -3,6 +3,7 @@ package com.chen.part_time.service;
 import com.chen.part_time.entity.PartTime;
 import com.chen.part_time.entity.PartTimeCondition;
 import com.chen.part_time.vo.MerchantPartTime;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -45,4 +46,6 @@ public interface IPartTimeService {
      * @param id
      */
     void addViewsById(Long id);
+
+    boolean updateDoing(Long id, Integer type);
 }

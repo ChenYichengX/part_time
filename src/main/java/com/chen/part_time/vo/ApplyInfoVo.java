@@ -14,7 +14,16 @@ public class ApplyInfoVo {
     private Date publishDate; // 发布时间
     private String price; // 价格
     private Long user_id; // 商家 id
+    private Integer doing; // 兼职状态
     private List<ApplyStu> stus; // 学生的申请信息
+
+    public Integer getDoing() {
+        return doing;
+    }
+
+    public void setDoing(Integer doing) {
+        this.doing = doing;
+    }
 
     public Long getPart_time_id() {
         return part_time_id;

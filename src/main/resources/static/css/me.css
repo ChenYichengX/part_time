@@ -45,7 +45,7 @@
 
 /* container*/
 .m-container {
-    max-width: 72em !important;
+    max-width: 78em !important;
     margin: auto !important;
 }
 
@@ -125,7 +125,11 @@ body{
     display: none !important;
 }
 
-
+@media screen and (max-width:768px){
+    .responsiveTr{
+        height: 140px !important;
+    }
+}
 
 
 @media screen and (max-width:768px) {

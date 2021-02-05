@@ -26,6 +26,6 @@ public interface IApplyDao {
     // 查询申请记录（给商家显示）
     List<ApplyInfoVo> getApplyInfoByUser_id(Long user_id);
 
-    // 将学生的选择状态改为1
+    // 将学生的选择状态改
     boolean updateStuChoose(Apply apply);
 }

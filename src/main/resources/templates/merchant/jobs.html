@@ -43,7 +43,7 @@
             <div class="header">提示</div>
             <p th:text="${message}">恭喜，操作成功</p>
         </div>
-        <div id="table-container">
+        <div id="table-container" th:fragment="applyList">
             <div style="margin-top: 5px;" class="ui table" th:each="applyInfoVo : ${applys.list}">
                 <table style="width: 100%" cellspacing="0">
                     <tr style="background-color: #f1f1f1" class="center aligned">
@@ -53,12 +53,12 @@
                         <td>类型：<span th:text="${applyInfoVo.type_name}">外卖员</span></td>
                         <td>工资：<span th:text="${applyInfoVo.price}">2元/单</span></td>
                         <td>
-                            <a href="#" onclick="return deletePartTime(this)"
+                            <a href="#" th:if="${applyInfoVo.doing} == 0" onclick="return deletePartTime(this)"
                                th:href="@{/merchant/partTime/{id}/delApply(id=${applyInfoVo.part_time_id})}"
                                class="ui mini red basic button">删除</a>
                         </td>
                     </tr>
-                    <tr class="center aligned" style="height: 60px" th:each="applyStu : ${applyInfoVo.stus}"
+                    <tr class="center aligned responsiveTr" style="height: 52px;" th:each="applyStu : ${applyInfoVo.stus}"
                         th:classappend="${applyStu.choose == 0} ? 'trHover'">
                         <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户：<span th:text="${applyStu.username}">xiaoming</span>
                         </td>
@@ -68,38 +68,48 @@
                         <td>
                             <input type="hidden" name="stuId" th:value="${applyStu.student_id}">
                             <input type="hidden" name="partTimeId" th:value="${applyInfoVo.part_time_id}">
-                            <button class='ui mini button teal' th:if="${applyStu.choose} == 1" onclick='startJob()'>开始兼职</button>
-                            <div th:if="${applyStu.choose} == 2">开始时间：<span th:text="${#dates.format(applyStu.start_time,'yyyy-MM-dd HH:mm:ss')}">2020-12-7 17:34:12</span></div>
+                            <button class='ui mini button teal' th:if="${applyStu.choose} == 1"
+                                    onclick='startJob(this)'>开始兼职
+                            </button>
+                            <div th:if="${applyStu.choose} == 2 or ${applyStu.choose} == 3">开始时间：<span
+                                    th:text="${#dates.format(applyStu.start_time,'yyyy-MM-dd HH:mm:ss')}">2020-12-7 17:34:12</span>
+                            </div>
                         </td>
                         <td>
-                            <div th:if="${applyStu.choose} == 3">结束时间：<span th:text="${#dates.format(applyStu.over_time,'yyyy-MM-dd HH:mm:ss')}">2020-12-7 17:34:12</span></div>
+                            <button class='ui mini button teal' th:if="${applyStu.choose} == 2" onclick='overJob(this)'>
+                                结束兼职
+                            </button>
+                            <div th:if="${applyStu.choose} == 3">结束时间：<span
+                                    th:text="${#dates.format(applyStu.over_time,'yyyy-MM-dd HH:mm:ss')}">2020-12-7 17:34:12</span>
+                            </div>
                         </td>
                     </tr>
                 </table>
             </div>
-            <div th:if="${#lists.isEmpty(applys.list)}"><h1>无申请记录</h1></div>
-        </div>
-        <!-- 内容底部 -->
-        <div class="ui bottom attached segment" th:unless="${#lists.isEmpty(applys.list)}">
-            <div class="ui middle aligned grid">
-                <div class="ui floated pagination menu" th:if="${applys.pages} >= 1">
+            <!-- 内容底部分页 -->
+            <div class="ui bottom attached segment" th:unless="${#lists.isEmpty(applys.list)}">
+                <div class="ui middle aligned grid">
+                    <div class="ui floated pagination menu" th:if="${applys.pages} >= 1">
                     <span class="item">
                         &nbsp;&nbsp;总共：
                         <span th:text="${applys.total}"></span>条记录&nbsp;&nbsp;&nbsp;&nbsp;当前页数：[
                         <span th:text="${applys.pageNum}"></span>/
                         <span th:text="${applys.pages}"></span>]&nbsp;&nbsp;
                     </span>
-                    <a onclick="page(this)" th:attr="data-page=1" th:unless="${applys.isFirstPage}" class="item">首页</a>
-                    <a onclick="page(this)" th:attr="data-page=${applys.prePage}" th:unless="${applys.isFirstPage}"
-                       class="item">上一页</a>
-                    <a onclick="page(this)" th:attr="data-page=${num}" th:each="num : ${applys.navigatepageNums}"
-                       th:text="${num}" class="item" th:classappend="${applys.pageNum == num} ? 'active'"></a>
-                    <a onclick="page(this)" th:attr="data-page=${applys.nextPage}" th:unless="${applys.isLastPage}"
-                       class="item">下一页</a>
-                    <a onclick="page(this)" th:attr="data-page=${applys.pages}" th:unless="${applys.isLastPage}"
-                       class="item">末页</a>
+                        <a onclick="page(this)" th:attr="data-page=1" th:unless="${applys.isFirstPage}"
+                           class="item">首页</a>
+                        <a onclick="page(this)" th:attr="data-page=${applys.prePage}" th:unless="${applys.isFirstPage}"
+                           class="item">上一页</a>
+                        <a onclick="page(this)" th:attr="data-page=${num}" th:each="num : ${applys.navigatepageNums}"
+                           th:text="${num}" class="item" th:classappend="${applys.pageNum == num} ? 'active'"></a>
+                        <a onclick="page(this)" th:attr="data-page=${applys.nextPage}" th:unless="${applys.isLastPage}"
+                           class="item">下一页</a>
+                        <a onclick="page(this)" th:attr="data-page=${applys.pages}" th:unless="${applys.isLastPage}"
+                           class="item">末页</a>
+                    </div>
                 </div>
             </div>
+            <div th:if="${#lists.isEmpty(applys.list)}"><h1>无申请记录</h1></div>
         </div>
     </div>
 </div>
@@ -165,18 +175,15 @@
      * @param node
      */
     function page(node) {
-        $("[name='page']").val($(node).data("page"));
-        loadData();
+        loadData($(node).data("page"));
     }
 
     /**
      * Ajax 的异步请求，局部刷新页面
      */
-    function loadData() {
-        $("#table-container").load("/merchant/partTimes/search", {
-            title: $("[name='title']").val(),
-            typeId: $("[name='typeId']").val(),
-            page: $("[name='page']").val()
+    function loadData(page) {
+        $("#table-container").load("/merchant/apply/search", {
+            page: page
         });
     }
 
@@ -191,62 +198,110 @@
         return b;
     }
 
+    // 选择按钮
     function choose(node) {
         var stuId = $(node).parent().parent().children("td").eq(3).children("input").eq(0).val();
-        var stuName = $(node).parent().parent().children("td").eq(0).children("span").text();
         var partTimeName = $(node).parent().parent().parent().children("tr").eq(0).children("td").eq(1).children("span").text();
         var partTimeId = $(node).parent().parent().children("td").eq(3).children("input").eq(1).val();
         var userName = $(node).parent().parent().children("td").eq(0).children("span").text();
-        var b = confirm("确定选择用户为" + userName + "该学生吗？");
+        var b = confirm("确定选择 '" + userName + "' 该学生吗？");
         if (b) {
             $.ajax({
                 url: "/merchant/choose",
                 data: {
                     partTimeId: partTimeId,
                     stuId: stuId,
-                    stuName: stuName,
                     partTimeName: partTimeName
                 },
                 success: function (ref) {
                     if (ref == "success") {
-                        alert('选择成功，已通知对方');
-                        $(node).parent().parent().css("background-color", "white");
-                        $(node).parent().parent().children("td").eq(4).html("");
-                        $(node).parent().parent().unbind("mouseenter mouseleave");
-                        $(node).parent().parent().children("td").eq(3).append("<button class='ui mini button teal' onclick='startJob(this)'>开始兼职</button>")
                     } else {
                         alert('通知失败，请联系管理员');
                     }
                 }
-            })
+            });
+            $(node).parent().parent().css("background-color", "white");
+            $(node).parent().parent().unbind("mouseenter").unbind("mouseleave");
+            $(node).parent().parent().removeClass('trHover');
+            $(node).parent().parent().children("td").eq(3).append($("<button class='ui mini button teal' onclick='startJob(this)'>开始兼职</button>"));
+            $(node).parent().parent().parent().children('tr:eq(0)').children("td:eq(4)").html("");
+            $(node).parent().html("");
         }
     }
 
+    // 开始兼职
     function startJob(node) {
         var stuId = $(node).parent().parent().children("td").eq(3).children("input").eq(0).val();
         var partTimeId = $(node).parent().parent().children("td").eq(3).children("input").eq(1).val();
         var userName = $(node).parent().parent().children("td").eq(0).children("span").text();
-        var b = confirm("确定用户为" + userName + "该学生开始兼职吗？");
-        console.log(node);
-        if(b){
+        var partTimeName = $(node).parent().parent().parent().children("tr").eq(0).children("td").eq(1).children("span").text();
+        var b = confirm("确定 " + userName + " 该学生开始兼职吗？");
+        if (b) {
             $.ajax({
                 url: '/merchant/start',
                 data: {
                     partTimeId: partTimeId,
-                    stuId: stuId
+                    stuId: stuId,
+                    partTimeName: partTimeName
                 },
                 success: function (ref) {
-
+                    if (ref == "success") {
+                        let now = new Date();
+                        let s = dateToString(now);
+                        $(node).parent().parent().children("td").eq(4).append($("<button class='ui mini button teal'>结束兼职</button>"));
+                        $(node).parent().html('开始时间：' + s);
+                    } else {
+                        alert('开始兼职失败，请联系管理员');
+                    }
                 }
             });
         }
     }
 
+    // 结束兼职
+    function overJob(node) {
+        var stuId = $(node).parent().parent().children("td").eq(3).children("input").eq(0).val();
+        var partTimeId = $(node).parent().parent().children("td").eq(3).children("input").eq(1).val();
+        var userName = $(node).parent().parent().children("td").eq(0).children("span").text();
+        var partTimeName = $(node).parent().parent().parent().children("tr").eq(0).children("td").eq(1).children("span").text();
+        var b = confirm("确定结束 '" + userName + "' 该学生的" + partTimeName + "兼职吗？");
+        if (b) {
+            $.ajax({
+                url: '/merchant/over',
+                data: {
+                    partTimeId: partTimeId,
+                    stuId: stuId,
+                    partTimeName: partTimeName
+                },
+                success: function (ref) {
+                    if (ref == "success") {
+                        let now = new Date();
+                        let s = dateToString(now);
+                        $(node).parent().parent().children("td").eq(4).html('结束时间：' + s);
+                    } else {
+                        alert('结束兼职失败，请联系管理员');
+                    }
+                }
+            });
+        }
+    }
+
+    function dateToString(now) {
+        let fullYear = now.getFullYear(); // 年
+        let month = now.getMonth(); // 月（0-11）
+        let date = now.getDate(); // 日
+        let hour = now.getHours(); // 小时
+        var minute = now.getMinutes(); // 分钟
+        var second = now.getSeconds(); // 秒
+        return '' + fullYear + '-' + (month + 1) + '-' + date + ' ' + hour + ':' + minute + ':' + second;
+    }
+
     $(function () {
-        $(".trHover").hover(function () {
+        $("#table-container").on("mouseenter", ".trHover", function () {
             $(this).css("background-color", "darkgray");
             $(this).children("td").eq(4).html("<button class='ui mini button teal' onclick='choose(this)'>选择</button>");
-        }, function () {
+        });
+        $("#table-container").on("mouseleave", ".trHover", function () {
             $(this).css("background-color", "white");
             $(this).children("td").eq(4).html("");
         });

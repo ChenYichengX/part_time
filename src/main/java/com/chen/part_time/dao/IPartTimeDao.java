@@ -4,6 +4,7 @@ import com.chen.part_time.entity.PartTime;
 import com.chen.part_time.entity.PartTimeCondition;
 import com.chen.part_time.vo.MerchantPartTime;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -47,5 +48,7 @@ public interface IPartTimeDao {
      * @param id
      */
     void addViewsById(Long id);
+
+    boolean updateDoing(@Param("id") Long id, @Param("type") Integer type);
 
 }

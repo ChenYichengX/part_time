@@ -12,11 +12,14 @@
         <result property="publishDate" column="publishDate"></result>
         <result property="price" column="price"></result>
         <result property="user_id" column="user_id"></result>
+        <result property="doing" column="doing"></result>
 
         <collection property="stus" javaType="java.util.ArrayList" ofType="com.chen.part_time.vo.ApplyStu">
             <result property="student_id" column="student_id"></result>
             <result property="username" column="username"></result>
             <result property="apply_time" column="apply_time"></result>
+            <result property="start_time" column="start_time"></result>
+            <result property="over_time" column="over_time"></result>
             <result property="phone" column="phone"></result>
             <result property="choose" column="choose"></result>
         </collection>
@@ -51,6 +54,7 @@
             u.`phone`,
             a.`apply_time`,
             a.choose,
+            p.doing,
             a.start_time,
             a.over_time
         FROM
@@ -58,6 +62,7 @@
             LEFT JOIN t_apply_part_time a ON p.`id` = a.`part_time_id`
             LEFT JOIN t_user u ON a.`user_id` = u.`id`
         WHERE p.user_id = #{user_id} AND a.`user_id` IS NOT NULL
+        order by doing asc, updateDate desc
     </select>
 
     <!-- boolean updateStuChoose(Apply apply); -->
