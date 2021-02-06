@@ -81,4 +81,24 @@
         </set>
         where user_id = #{user_id} and part_time_id = #{part_time_id}
     </update>
+
+    <!-- List<StuApplyInfoVo> getApplyInfoByStuId(Long stuId); -->
+    <select id="getApplyInfoByStuId" resultType="com.chen.part_time.vo.StuApplyInfoVo">
+        SELECT p.id as partTimeId,
+            p.title,
+            t.`name` as typeName,
+            p.`price`,
+            pay.name AS payName,
+            a.`apply_time`,
+            a.choose,
+            a.start_time,
+            a.over_time
+        FROM
+            t_part_time p
+            LEFT JOIN t_type t ON p.`type_id`=t.`id`
+            LEFT JOIN t_payment_type pay ON pay.id = p.pay_id
+            LEFT JOIN t_apply_part_time a ON p.`id` = a.`part_time_id`
+        WHERE a.user_id = #{stuId}
+        order by choose asc, apply_time desc
+    </select>
 </mapper>

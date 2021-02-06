@@ -38,7 +38,7 @@
         WHERE id IN(
             SELECT a.user_id FROM t_apply_part_time a
             LEFT JOIN t_part_time p ON p.`id` = a.`part_time_id`
-            WHERE p.`id`= #{part_time_id}
+            WHERE p.`id`= #{part_time_id} and choose = 0
         )
     </select>
 </mapper>

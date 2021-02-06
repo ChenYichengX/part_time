@@ -196,12 +196,12 @@ public class PartTimeController {
         } else { // 上传了图片
             String filename = pictureFileUpload(file, user);
             partTime.setFirstPicture(filename);
-            boolean b = partTimeService.savePartTime(partTime);
-            if (b) { // 发布兼职信息成功
-                attributes.addFlashAttribute("message", "发布成功");
-            } else { // 失败
-                attributes.addFlashAttribute("message", "发布失败");
-            }
+        }
+        boolean b = partTimeService.savePartTime(partTime);
+        if (b) { // 发布兼职信息成功
+            attributes.addFlashAttribute("message", "发布成功");
+        } else { // 失败
+            attributes.addFlashAttribute("message", "发布失败");
         }
         return "redirect:/merchant/partTimes";
     }
@@ -273,7 +273,7 @@ public class PartTimeController {
         }
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        PageHelper.startPage(pageNum, 5);
+        PageHelper.startPage(pageNum, 6);
         List<ApplyInfoVo> applyInfoByUser_id = applyService.getApplyInfoByUser_id(user.getId());
         PageInfo<ApplyInfoVo> pageInfo = new PageInfo(applyInfoByUser_id, 5);
         model.addAttribute("applys", pageInfo);
@@ -291,7 +291,7 @@ public class PartTimeController {
         }
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        PageHelper.startPage(pageNum, 5);
+        PageHelper.startPage(pageNum, 6);
         List<ApplyInfoVo> applyInfoByUser_id = applyService.getApplyInfoByUser_id(user.getId());
         PageInfo<ApplyInfoVo> pageInfo = new PageInfo(applyInfoByUser_id, 5);
         model.addAttribute("applys", pageInfo);

@@ -4,6 +4,7 @@ import com.chen.part_time.dao.IApplyDao;
 import com.chen.part_time.entity.Apply;
 import com.chen.part_time.service.IApplyService;
 import com.chen.part_time.vo.ApplyInfoVo;
+import com.chen.part_time.vo.StuApplyInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +42,10 @@ public class ApplyServiceImpl implements IApplyService {
     @Override
     public boolean updateStuChoose(Apply apply) {
         return applyDao.updateStuChoose(apply);
+    }
+
+    @Override
+    public List<StuApplyInfoVo> getApplyInfoByStuId(Long stuId) {
+        return applyDao.getApplyInfoByStuId(stuId);
     }
 }

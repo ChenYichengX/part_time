@@ -1,25 +1,21 @@
 package com.chen.part_time.web;
 
-import com.chen.part_time.dao.IApplyDao;
 import com.chen.part_time.entity.*;
 import com.chen.part_time.service.*;
 import com.chen.part_time.vo.MerchantPartTime;
+import com.chen.part_time.vo.StuApplyInfoVo;
 import com.chen.part_time.vo.TypeVo;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.FileNotFoundException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -304,4 +300,57 @@ public class IndexController {
         javaMailSender.send(simpleMailMessage);
         return "success";
     }
+
+    /**
+     * 个人中心（兼职记录）
+     * @return
+     */
+    @GetMapping("/user")
+    public String userRecord(HttpServletRequest request,Model model){
+        HttpSession session = request.getSession();
+        Object user = session.getAttribute("user");
+        if (user == null) { // 未登录,去登录
+            return "redirect:/merchant";
+        }
+        if (user instanceof Admin) { // 是管理员
+            return "redirect:/admin";
+        }
+        User u = null;
+        if (user instanceof User) {
+            u = (User) user;
+        }
+        if (u.getType() == 1) { // 是商家
+            return "redirect:/merchant";
+        }
+        // 查询该学生对应的兼职记录
+        List<StuApplyInfoVo> applyInfo = applyService.getApplyInfoByStuId(u.getId());
+        model.addAttribute("applyInfo",applyInfo);
+        return "user";
+    }
+
+//    /**
+//     * 验证用户
+//     * @return
+//     */
+//    @GetMapping("/vilifyUser")
+//    public String vilifyUser(@PathVariable Long id,HttpServletRequest request){
+//        HttpSession session = request.getSession();
+//        Object user = session.getAttribute("user");
+//        if (user == null) { // 未登录
+//            return "false";
+//        }
+//        if (user instanceof Admin) { // 不是学生
+//            return "NoStu";
+//        }
+//        User u = null;
+//        if (user instanceof User) {
+//            u = (User) user;
+//        }
+//        if (u.getType() == 1) { // 不是学生
+//            return "NoStu";
+//        }
+//        return "";
+//    }
+
+
 }

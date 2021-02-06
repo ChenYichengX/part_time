@@ -2,6 +2,7 @@ package com.chen.part_time.service;
 
 import com.chen.part_time.entity.Apply;
 import com.chen.part_time.vo.ApplyInfoVo;
+import com.chen.part_time.vo.StuApplyInfoVo;
 
 import java.util.List;
 
@@ -26,4 +27,7 @@ public interface IApplyService {
 
     // 将学生的选择状态改为1
     boolean updateStuChoose(Apply apply);
+
+    // 查询兼职记录（通过学生id）
+    List<StuApplyInfoVo> getApplyInfoByStuId(Long stuId);
 }

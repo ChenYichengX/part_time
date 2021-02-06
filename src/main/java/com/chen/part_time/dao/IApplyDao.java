@@ -2,6 +2,7 @@ package com.chen.part_time.dao;
 
 import com.chen.part_time.entity.Apply;
 import com.chen.part_time.vo.ApplyInfoVo;
+import com.chen.part_time.vo.StuApplyInfoVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,4 +29,7 @@ public interface IApplyDao {
 
     // 将学生的选择状态改
     boolean updateStuChoose(Apply apply);
+
+    // 查询兼职记录（通过学生id）
+    List<StuApplyInfoVo> getApplyInfoByStuId(Long stuId);
 }
