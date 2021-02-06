@@ -48,4 +48,9 @@ public class ApplyServiceImpl implements IApplyService {
     public List<StuApplyInfoVo> getApplyInfoByStuId(Long stuId) {
         return applyDao.getApplyInfoByStuId(stuId);
     }
+
+    @Override
+    public Apply getOneByApply(Apply apply) {
+        return applyDao.getOneByApply(apply);
+    }
 }

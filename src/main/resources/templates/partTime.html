@@ -88,10 +88,10 @@
             </div>
         </div>
         <div class="ui attached segment grid">
-            <div class="fifteen wide column">
+            <div id="comment-container" class="fifteen wide column">
                 <h3>评论</h3>
                 <!--松散的列表-->
-                <div class="ui relaxed list">
+                <div class="ui relaxed list" th:fragment="commentList">
                     <div class="item" style="margin-left: 15px;">
                         <span style="font-size: 16px;line-height: 24px; font-family: Consolas">
                             <span style="font-size: 18px;color: #00b5ad">小明：</span>我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
@@ -113,6 +113,15 @@
                             我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
                         </span>
                     </div>
+                </div>
+            </div>
+            <div id="comment-form" class="ui form fifteen wide column">
+                <input type="hidden" name="partTimeId" th:value="${partTime.id}">
+                <div class="field">
+                    <textarea name="content" placeholder="请输入评论内容..."></textarea>
+                </div>
+                <div class="field m-mobile-wide m-margin-buttom-mini">
+                    <button id="commentPost-btn" type="button" class="ui teal button m-mobile-wide"><i class="edit icon"></i>提交</button>
                 </div>
             </div>
         </div>
@@ -177,11 +186,59 @@
         $('.m-item').toggleClass('m-mobile-hide');
     });
 
-    $(function () {
-        if([[${count}]] == 1){
-            $("#applyBtn")
+    $('.ui.form').form({
+        fields : {
+            content : {
+                identifier : 'content',
+                rules : [{
+                    type : 'empty',
+                    prompt: '请输入评论内容'
+                }]
+            }
         }
     });
+
+    $(function () {
+        $("#comment-container").load(/*[[@{/comments/{id}(id=${partTime.id})}]]*/);
+    });
+
+    $('#commentPost-btn').click(function () {
+        var boo = $('.ui.form').form('validate form');
+        if(boo){
+            console.log("校验成功");
+            postDate();
+        }else{
+            console.log("校验失败");
+        }
+    });
+
+    function postDate() {
+        $.ajax({
+            url: "/comments",
+            type: "post",
+            data: {
+                "content": $("[name='content']").val(),
+                "partTimeId" : $("[name='partTimeId']").val()
+            },
+            success: function(ref){
+                if(ref = "success"){
+                    // 将评论插入到 commentList 中
+
+                    //滚动到留言列表区域
+                    $(window).scrollTo($('#comment-container'),500);
+                    clearContent();
+                }else {
+                    alert(ref);
+                }
+            }
+        });
+
+    }
+
+    function clearContent() {
+        $("[name='content']").val('');
+        $("[name='content']").attr("placeholder","请输入评论信息...");
+    }
 
     function apply(node) {
         let id = $(node).data("id");

@@ -101,4 +101,19 @@
         WHERE a.user_id = #{stuId}
         order by choose asc, apply_time desc
     </select>
+
+<!--    Apply getOneByApply(Apply apply);-->
+    <select id="getOneByApply">
+        select
+            *
+        from t_apply_part_time
+        <where>
+            <if test="user_id != null">
+                user_id = #{user_id}
+            </if>
+            <if test="part_time_id != null">
+                and part_time_id = #{part_time_id}
+            </if>
+        </where>
+    </select>
 </mapper>
