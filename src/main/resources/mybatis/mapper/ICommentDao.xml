@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:写接口的全类名，相当于告诉 MyBatis 这个配置文件实现哪个接口 -->
+<mapper namespace="com.chen.part_time.dao.ICommentDao">
+
+    <!--    boolean addComment(Comment comment);-->
+    <insert id="addComment">
+        insert into t_comment(part_time_id,user_id,content) values(#{partTimeId},#{userId},#{content})
+    </insert>
+
+    <!--    List<Comment> getAllByComment(Comment comment);-->
+    <select id="getAllByComment" resultType="com.chen.part_time.entity.Comment">
+        select
+            id,
+            part_time_id,
+            user_id,
+            content
+        form t_comment
+        <where>
+            <if test="partTimeId != null">
+                part_time_id = #{partTimeId}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+        </where>
+    </select>
+</mapper>
