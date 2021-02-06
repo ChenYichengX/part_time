@@ -328,29 +328,4 @@ public class IndexController {
         return "user";
     }
 
-//    /**
-//     * 验证用户
-//     * @return
-//     */
-//    @GetMapping("/vilifyUser")
-//    public String vilifyUser(@PathVariable Long id,HttpServletRequest request){
-//        HttpSession session = request.getSession();
-//        Object user = session.getAttribute("user");
-//        if (user == null) { // 未登录
-//            return "false";
-//        }
-//        if (user instanceof Admin) { // 不是学生
-//            return "NoStu";
-//        }
-//        User u = null;
-//        if (user instanceof User) {
-//            u = (User) user;
-//        }
-//        if (u.getType() == 1) { // 不是学生
-//            return "NoStu";
-//        }
-//        return "";
-//    }
-
-
 }

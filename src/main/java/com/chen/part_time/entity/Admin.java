@@ -8,6 +8,7 @@ public class Admin {
     private Long id;
     private String username;
     private String password;
+    private final Integer type = 1;
 
     public Admin() {
     }
@@ -15,6 +16,10 @@ public class Admin {
     public Admin(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public Integer getType() {
+        return type;
     }
 
     public Long getId() {

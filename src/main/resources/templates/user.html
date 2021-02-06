@@ -16,7 +16,7 @@
             <h2 class="ui teal header item">南理校内兼职</h2>
             <a href="index.html" class="m-item right item m-mobile-hide"><i class="home icon"></i>首页</a>
             <a href="type.html" class="m-item active item m-mobile-hide"><i class="idea icon"></i>分类</a>
-            <a href="user.html" class="m-item item m-mobile-hide"><i class="user icon"></i>个人中心</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="edit outline icon"></i>发布兼职信息</a>
             <a href="regist.html" class="m-item item m-mobile-hide"><i class="user plus icon"></i>注册</a>
             <a href="login.html" class="m-item item m-mobile-hide"><i class="sign-in icon"></i>登录</a>
             <div class="right m-item item m-mobile-hide">
@@ -72,7 +72,8 @@
                     <td><span th:text="${#dates.format(apply.start_time,'yyyy-MM-dd HH:mm:ss')}"></span></td>
                     <td><span th:text="${#dates.format(apply.start_time,'yyyy-MM-dd HH:mm:ss')}"></span></td>
                     <td>
-                        <button class="ui button teal mini">评价</button>
+                        <label class="ui label" th:if="${apply.choose} == 0 or ${apply.choose} == 1">不可评价</label>
+                        <button class="ui button mini teal" th:if="${apply.choose} == 2 or ${apply.choose} == 3">评价</button>
                     </td>
                 </tr>
             </table>

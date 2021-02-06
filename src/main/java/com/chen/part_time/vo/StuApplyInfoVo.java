@@ -35,8 +35,6 @@ public class StuApplyInfoVo {
         this.title = title;
     }
 
-
-
     public String getPrice() {
         return price;
     }
