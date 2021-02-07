@@ -103,7 +103,7 @@
     </select>
 
 <!--    Apply getOneByApply(Apply apply);-->
-    <select id="getOneByApply">
+    <select id="getOneByApply" resultType="com.chen.part_time.entity.Apply">
         select
             *
         from t_apply_part_time

@@ -31,19 +31,19 @@ public class CommentController {
     private IApplyService applyService;
 
     @GetMapping("/comments/{id}")
-    public String getCommentByPartTimeId(@PathVariable("id") Long id, Model model){
+    public String getCommentByPartTimeId(@PathVariable("id") Long id, Model model) {
         Comment comment = new Comment();
         comment.setPartTimeId(id);
         List<Comment> allByComment = commentService.getAllByComment(comment);
-        model.addAttribute("comments",allByComment);
+        model.addAttribute("comments", allByComment);
         return "partTime :: commentList";
     }
 
     @PostMapping("/comments")
     @ResponseBody
-    public String submitPost(Comment comment, HttpSession session){
-        Object user =  session.getAttribute("user");
-        if(user == null) {
+    public String submitPost(Comment comment, HttpSession session) {
+        Object user = session.getAttribute("user");
+        if (user == null) {
             return "登录后才可以评论呀！！！";
         }
         if (user instanceof Admin) { // 是管理员
@@ -57,14 +57,26 @@ public class CommentController {
             return "商家不能评论哦！！！";
         }
         // 查询当前用户该兼职的兼职状态
-        Apply apply = new Apply(comment.getPartTimeId(),u.getId());
+        Apply apply = new Apply(comment.getPartTimeId(), u.getId());
         Apply oneByApply = applyService.getOneByApply(apply);
-        if(oneByApply.getChoose() < Apply.CHOOSE_STARTED){
+        if (apply == null) {
+            return "只有开始兼职的人才可以评论哦！！！";
+        }
+        if (oneByApply.getChoose() < Apply.CHOOSE_STARTED) {
             // 说明不可以评论
-            return "等开始兼职了才可以评论哦！！！";
+            return "等开始兼职了就可以评论啦！！！";
         }
         comment.setUserId(u.getId());
-        commentService.addComment(comment);
+        List<Comment> allByComment = commentService.getAllByComment(comment);
+        if(allByComment != null && allByComment.size() >= 2){
+            // 已评论过
+            return "您已经评论过 2 次啦！！！";
+        }
+        try {
+            commentService.addComment(comment);
+        } catch (Exception e) {
+            return "评论失败，请联系管理员!";
+        }
         return "success";
     }
 }

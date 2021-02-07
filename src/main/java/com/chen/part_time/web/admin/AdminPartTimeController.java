@@ -47,7 +47,8 @@ public class AdminPartTimeController {
     public AdminPartTimeController(){
         try {
             String path = ResourceUtils.getURL("classpath:").getPath() + "static/images";
-            String realPath = path.replace("/","\\").substring(1,path.length());
+//            String realPath = path.replace("/","\\").substring(1,path.length());
+            String realPath = path.substring(1);
             basePath = realPath;
         } catch (FileNotFoundException e) {
             e.printStackTrace();

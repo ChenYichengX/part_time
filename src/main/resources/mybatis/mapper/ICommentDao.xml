@@ -18,7 +18,7 @@
             t.user_id,
             content,
             u.nickname as nickName
-        form t_comment t left join t_user u on u.id = t.user_id
+        from t_comment t left join t_user u on u.id = t.user_id
         <where>
             <if test="partTimeId != null">
                 part_time_id = #{partTimeId}

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>兼职详情</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-    <link href="../static/css/me.css" rel="stylesheet" type="text/css">
+    <link href="../static/css/me.css" th:href="@{/css/me.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
 <!-- 导航 -->
@@ -88,29 +88,18 @@
             </div>
         </div>
         <div class="ui attached segment grid">
-            <div id="comment-container" class="fifteen wide column">
-                <h3>评论</h3>
+            <div id="comment-container" class="fifteen wide column" th:fragment="commentList">
+                <h3 th:text="${#lists.isEmpty(comments)} ? '暂无评论' : '评论' ">评论</h3>
                 <!--松散的列表-->
-                <div class="ui relaxed list" th:fragment="commentList">
-                    <div class="item" style="margin-left: 15px;">
+                <div class="ui relaxed list" id="commentList">
+                    <div class="item" style="margin-left: 15px;" th:each="comment : ${comments}">
                         <span style="font-size: 16px;line-height: 24px; font-family: Consolas">
-                            <span style="font-size: 18px;color: #00b5ad">小明：</span>我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
+                            <span style="font-size: 18px;color: #00b5ad" th:text="${comment.nickName} + '：'"></span>
+                            <span th:text="${comment.content}">
+                                我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
                             我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
                             我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
-                        </span>
-                    </div>
-                    <div class="item" style="margin-left: 15px;">
-                        <span style="font-size: 16px;line-height: 24px; font-family: Consolas">
-                            <span style="font-size: 18px;color: #00b5ad">小明：</span>我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
-                            我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
-                            我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
-                        </span>
-                    </div>
-                    <div class="item" style="margin-left: 15px;">
-                        <span style="font-size: 16px;line-height: 24px; font-family: Consolas">
-                            <span style="font-size: 18px;color: #00b5ad">小明：</span>我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
-                            我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
-                            我觉得不错,就是店家人太好了吧，非常好，错很多好吃的来吃。
+                            </span>
                         </span>
                     </div>
                 </div>
@@ -118,11 +107,12 @@
             <div id="comment-form" class="ui form fifteen wide column">
                 <input type="hidden" name="partTimeId" th:value="${partTime.id}">
                 <div class="field">
-                    <textarea name="content" placeholder="请输入评论内容..."></textarea>
+                    <textarea style="resize:none;" name="content" placeholder="请输入评论内容..."></textarea>
                 </div>
                 <div class="field m-mobile-wide m-margin-buttom-mini">
                     <button id="commentPost-btn" type="button" class="ui teal button m-mobile-wide"><i class="edit icon"></i>提交</button>
                 </div>
+                <div class="ui error message"></div>
             </div>
         </div>
         <div class="ui attached positive grid ">
@@ -190,22 +180,28 @@
         fields : {
             content : {
                 identifier : 'content',
-                rules : [{
-                    type : 'empty',
-                    prompt: '请输入评论内容'
-                }]
+                rules : [
+                    {
+                        type : 'empty',
+                        prompt: '请输入评论内容'
+                    },
+                    {
+                        type   : 'maxLength[220]',
+                        prompt: '评论内容需在 220 个字符以内'
+                    }
+                ]
             }
         }
     });
 
     $(function () {
-        $("#comment-container").load(/*[[@{/comments/{id}(id=${partTime.id})}]]*/);
+        let id = [[${partTime.id}]]
+        $("#comment-container").load("/comments/" + id);
     });
 
     $('#commentPost-btn').click(function () {
         var boo = $('.ui.form').form('validate form');
         if(boo){
-            console.log("校验成功");
             postDate();
         }else{
             console.log("校验失败");
@@ -213,17 +209,22 @@
     });
 
     function postDate() {
+        let content = $("[name='content']").val();
         $.ajax({
             url: "/comments",
             type: "post",
             data: {
-                "content": $("[name='content']").val(),
+                "content": content,
                 "partTimeId" : $("[name='partTimeId']").val()
             },
             success: function(ref){
-                if(ref = "success"){
+                if(ref == "success"){
                     // 将评论插入到 commentList 中
-
+                    let stuName = '[[${session.user.nickName}]]';
+                    $("#commentList").append($('<div class="item" style="margin-left: 15px;">\n' +
+                        '                        <span style="font-size: 16px;line-height: 24px; font-family: Consolas">\n' +
+                        '                            <span style="font-size: 18px;color: #00b5ad">'+ stuName +'：</span>' +
+                        '<span>'+ content +'</span></div>'));
                     //滚动到留言列表区域
                     $(window).scrollTo($('#comment-container'),500);
                     clearContent();
