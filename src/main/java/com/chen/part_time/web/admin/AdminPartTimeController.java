@@ -202,7 +202,7 @@ public class AdminPartTimeController {
         String filename = user.getUsername() + UUID.randomUUID().toString().substring(0, 5) + new Date().getTime() + "_" + file.getOriginalFilename();
         File picture = new File(basePath,filename);
         try {
-            file.transferTo(picture);
+            file.transferTo(picture.getAbsoluteFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
