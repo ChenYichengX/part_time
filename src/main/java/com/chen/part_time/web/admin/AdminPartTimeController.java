@@ -48,7 +48,9 @@ public class AdminPartTimeController {
         try {
             String path = ResourceUtils.getURL("classpath:").getPath() + "static/images";
 //            String realPath = path.replace("/","\\").substring(1,path.length());
-            String realPath = path.substring(1);
+            System.out.println("path--" + path);
+            String realPath = path.substring(path.indexOf('/'));
+            System.out.println("realPath--" + realPath);
             basePath = realPath;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -202,6 +204,7 @@ public class AdminPartTimeController {
         String filename = user.getUsername() + UUID.randomUUID().toString().substring(0, 5) + new Date().getTime() + "_" + file.getOriginalFilename();
         File picture = new File(basePath,filename);
         try {
+            System.out.println(picture.getAbsoluteFile());
             file.transferTo(picture.getAbsoluteFile());
         } catch (IOException e) {
             e.printStackTrace();
