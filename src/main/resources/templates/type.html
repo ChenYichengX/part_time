@@ -91,7 +91,7 @@
 							<!-- 图片 -->
 							<div class="four wide column">
 								<a href="#" th:href="@{/partTime/{id}(id=${partTime.id})}" target="_blank" th:attr="data-id=${partTime.id}" onclick="return partTime(this)">
-									<img src="https://picsum.photos/id/1/800/450?image=1" th:src="@{/images/{path}(path=${partTime.firstPicture})}"
+									<img src="https://picsum.photos/id/1/800/450?image=1" th:src="@{/img/{path}(path=${partTime.firstPicture})}"
 										 style="width: 224px; height: 126px;" alt="" class="ui rounded image">
 								</a>
 							</div>

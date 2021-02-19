@@ -37,7 +37,7 @@
         <button style="float: right" onclick="closeAd()">×</button>
         <div style="width: 100%; margin-top: 22px;" th:each="ad : ${ads}">
             <a href="#" th:href="${ad.actionValue}" th:target="${ad.actionType} == 1 ? '_self' : '_blank'">
-                <img src="" th:src="@{/images/{path}(path=${ad.imageUrl})}" th:alt="${ad.title}" th:title="${ad.title}" style="width: 100%">
+                <img src="" th:src="@{/img/{path}(path=${ad.imageUrl})}" th:alt="${ad.title}" th:title="${ad.title}" style="width: 100%">
             </a>
         </div>
     </div>
@@ -107,7 +107,7 @@
                                 <a href="#" th:href="@{/partTime/{id}(id=${partTime.id})}"
                                    target="_blank" th:attr="data-id=${partTime.id}" onclick="return partTime(this)">
                                     <img src="https://picsum.photos/id/1/800/450?image=1" alt=""
-                                         th:src="@{/images/{path}(path=${partTime.firstPicture})}"
+                                         th:src="@{/img/{path}(path=${partTime.firstPicture})}"
                                          style="width: 211px; height: 132px; " class="ui rounded image">
                                 </a>
                             </div>
@@ -183,7 +183,7 @@
             <div class="three wide column">
                 <div class="ui inverted link list">
                     <div class="item">
-                        <img src="../static/images/avatar.jpg" th:src="@{/images/avatar.jpg}" class="ui rounded image"
+                        <img src="../static/images/avatar.jpg" th:src="@{/img/avatar.jpg}" class="ui rounded image"
                              alt="" style="width: 90px;">
                     </div>
                 </div>

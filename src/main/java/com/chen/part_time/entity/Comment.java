@@ -9,15 +9,15 @@ public class Comment {
     private Long id;
     private Long partTimeId;
     private Long userId;
-    private String nickName; // 学生昵称
+    private String username; // 学生昵称
     private String content; // 内容
 
-    public String getNickName() {
-        return nickName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Long getId() {

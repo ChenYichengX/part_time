@@ -42,16 +42,28 @@ public class AdminPartTimeController {
     @Autowired
     private IUnitService unitService;
 
-    private String basePath = ""; // 图片的基路径
+    private File basePath; // 图片的基路径
 
     public AdminPartTimeController(){
         try {
-            String path = ResourceUtils.getURL("classpath:").getPath() + "static/images";
+//            String path = ResourceUtils.getURL("classpath:").getPath() + "static/images";
 //            String realPath = path.replace("/","\\").substring(1,path.length());
-            System.out.println("path--" + path);
-            String realPath = path.substring(path.indexOf('/'));
-            System.out.println("realPath--" + realPath);
-            basePath = realPath;
+//            System.out.println("path--" + path);
+            File rootPath = new File(ResourceUtils.getURL("classpath:").getPath());
+//            String realPath = path.substring(path.indexOf('/'));
+//            System.out.println(rootPath.getAbsolutePath());
+            if(!rootPath.exists()){
+                rootPath = new File("");
+            }
+            basePath = new File(rootPath.getAbsolutePath()+"/images");
+
+//            String s = realPath.replaceAll("!", "");
+//            System.out.println("realPath--" + realPath);
+//            System.out.println(s);
+            if(!basePath.exists()){
+                //不存在，创建
+                basePath.mkdirs();
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -204,8 +216,8 @@ public class AdminPartTimeController {
         String filename = user.getUsername() + UUID.randomUUID().toString().substring(0, 5) + new Date().getTime() + "_" + file.getOriginalFilename();
         File picture = new File(basePath,filename);
         try {
-            System.out.println(picture.getAbsoluteFile());
-            file.transferTo(picture.getAbsoluteFile());
+//            System.out.println(picture.getAbsoluteFile());
+            file.transferTo(picture);
         } catch (IOException e) {
             e.printStackTrace();
         }

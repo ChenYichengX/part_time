@@ -30,6 +30,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        String linuxPath = "/home/chenyicheng/myProject/images/";
+        registry.addResourceHandler("/img/**").addResourceLocations("file:" + linuxPath);
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
     }
 }

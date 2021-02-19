@@ -94,13 +94,15 @@ public class IndexController {
         if (page != null && page != 0) {
             pageNum = page;
         }
+        String replace = query.replace("%", "//%");
+        String str = replace.replace("_", "//_");
         // 中间要显示的内容。按浏览次数排序
         PartTimeCondition part2 = new PartTimeCondition();
-        part2.setContent(query);
-        part2.setUser_name(query);
-        part2.setTitle(query);
-        part2.setType_name(query);
-        part2.setRequire_text(query);
+        part2.setContent(str);
+        part2.setUser_name(str);
+        part2.setTitle(str);
+        part2.setType_name(str);
+        part2.setRequire_text(str);
         PageHelper.startPage(pageNum, 4);
         List<MerchantPartTime> allPartTimeByView = partTimeService.getAllPartTimeByView(part2);
         PageInfo<MerchantPartTime> contentInfo = new PageInfo<>(allPartTimeByView, 5);
@@ -116,12 +118,15 @@ public class IndexController {
         if (page != null && page != 0) {
             pageNum = page;
         }
+        String replace = query.replace("%", "//%");
+        String str = replace.replace("_", "//_");
         // 中间要显示的内容。按浏览次数排序
         PartTimeCondition part2 = new PartTimeCondition();
-        part2.setContent(query);
-        part2.setUser_name(query);
-        part2.setTitle(query);
-        part2.setType_name(query);
+        part2.setContent(str);
+        part2.setUser_name(str);
+        part2.setTitle(str);
+        part2.setType_name(str);
+        part2.setRequire_text(str);
         PageHelper.startPage(pageNum, 4);
         List<MerchantPartTime> allPartTimeByView = partTimeService.getAllPartTimeByView(part2);
         PageInfo<MerchantPartTime> contentInfo = new PageInfo<>(allPartTimeByView, 5);

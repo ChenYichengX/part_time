@@ -171,6 +171,7 @@
         t--;
         if(t<=0){
             clearInterval(intetval);
+            $("#sendCode").attr("disabled",false);
             $("#countDown").text("验证码已失效，请重新发送！");
         }
     }
@@ -294,9 +295,10 @@
                         intetval=setInterval("refer()",1000);
                     }else if(data=="limit"){
                         clearInterval(intetval);
-                        $("#countDown").text("单日发送超过次数");
+                        $("#countDown").text("一小时内只能发送3次");
                     }
                 });
+                $("#sendCode").attr("disabled",true);
             }
             return false;
         });

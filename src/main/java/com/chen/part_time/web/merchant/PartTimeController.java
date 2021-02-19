@@ -50,16 +50,23 @@ public class PartTimeController {
     private String host = "123.57.174.182";
     private int port = 6379;
 
-    private String basePath = ""; // 图片的基路径
+    private File basePath; // 图片的基路径
 
     public PartTimeController() {
         try {
-            String path = ResourceUtils.getURL("classpath:").getPath() + "static/images";
+//            String path = ResourceUtils.getURL("classpath:").getPath() + "static/images";
 //            String realPath = path.replace("/", "\\").substring(1, path.length());
-
-            String realPath = path.substring(1);
+            File rootPath = new File(ResourceUtils.getURL("classpath:").getPath());
+//            String realPath = path.substring(1);
 //            System.out.println(realPath); // D:\gitRep\part_time\target\classes\static\images
-            basePath = realPath;
+            if(!rootPath.exists()){
+                rootPath = new File("");
+            }
+            basePath = new File(rootPath.getAbsolutePath()+"/images");
+            if(!basePath.exists()){
+                //不存在，创建
+                basePath.mkdirs();
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -152,7 +159,7 @@ public class PartTimeController {
      */
     @PostMapping("partTime/input")
     public String AddPartTime(PartTime partTime,
-                              int price, int unit,
+                              String price, int unit,
                               @RequestParam(value = "file", required = false) MultipartFile file,
                               HttpSession session,
                               HttpServletRequest request,
@@ -220,8 +227,7 @@ public class PartTimeController {
         String filename = user.getUsername() + UUID.randomUUID().toString().substring(0, 5) + new Date().getTime() + "_" + file.getOriginalFilename();
         File picture = new File(basePath, filename);
         try {
-            System.out.println(picture.getAbsoluteFile());
-            file.transferTo(picture.getAbsoluteFile());
+            file.transferTo(picture);
         } catch (IOException e) {
             e.printStackTrace();
         }

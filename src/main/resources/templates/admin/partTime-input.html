@@ -288,10 +288,17 @@
             },
             price: {
                 identifier: 'price',
-                rules: [{
-                    type: 'empty',
-                    prompt: '请填写价格'
-                }]
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: '请填写价格'
+                    },
+                    {
+                        type: 'regExp',
+                        value: /^\d{1,4}(?:\.\d{1})?$/,
+                        prompt: '大小不能超过10000元,只能保留一位小数'
+                    }
+                ]
             }
         }
     });

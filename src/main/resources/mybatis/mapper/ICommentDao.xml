@@ -17,7 +17,7 @@
             t.part_time_id,
             t.user_id,
             content,
-            u.nickname as nickName
+            u.username as username
         from t_comment t left join t_user u on u.id = t.user_id
         <where>
             <if test="partTimeId != null">

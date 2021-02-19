@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="right m-item item m-mobile-hide">
-                <form name="search" method="post" action="" th:action="@{/search}" target="_blank">
+                <form name="search" method="post" action="" th:action="@{/search}" target="search">
                     <div class="ui icon input">
                         <input type="text" name="query" placeholder="Search..." th:value="${query}"/>
                         <i onclick="document.forms['search'].submit()" class="search link icon" id="search-btn"></i>
@@ -52,7 +52,7 @@
             <div class="three wide column">
                 <div class="ui inverted link list">
                     <div class="item">
-                        <img src="../static/images/avatar.jpg" th:src="@{/images/avatar.jpg}" class="ui rounded image"
+                        <img src="../static/images/avatar.jpg" th:src="@{/img/avatar.jpg}" class="ui rounded image"
                              alt="" style="width: 90px;">
                     </div>
                 </div>

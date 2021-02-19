@@ -81,7 +81,7 @@
                         </td>
                         <td>
                             <img src="" width="300px" id="tx"
-                                 th:src="${partTime.firstPicture != null and partTime.firstPicture != ''} ? @{/images/{path}(path=${partTime.firstPicture})}">
+                                 th:src="${partTime.firstPicture != null and partTime.firstPicture != ''} ? @{/img/{path}(path=${partTime.firstPicture})}">
                             <input type="hidden" name="firstPicture" th:value="${partTime.firstPicture}" >
                         </td>
                     </tr>
@@ -118,7 +118,7 @@
                         <td class="m-margin-top-mini">价格：</td>
                         <td>
                             <div class="required field input">
-                                <input style="width: 70px;float: left;" type="text" name="price" th:value="${price}">&nbsp;&nbsp;元&nbsp;/&nbsp;
+                                <input style="width: 78px;float: left;" type="text" name="price" th:value="${price}">&nbsp;&nbsp;元&nbsp;/&nbsp;
                                 <select name="unit" style="width: 80px;display: inline-block">
                                     <option th:each="unit : ${units}" th:text="${unit.name}" th:value="${unit.id}"
                                             th:selected="${unitStr == unit.name} ? 'selected'">小时
@@ -289,10 +289,17 @@
             },
             price: {
                 identifier: 'price',
-                rules: [{
-                    type: 'empty',
-                    prompt: '请填写价格'
-                }]
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: '请填写价格'
+                    },
+                    {
+                        type: 'regExp',
+                        value: /^\d{1,4}(?:\.\d{1})?$/,
+                        prompt: '大小不能超过10000元,只能保留一位小数'
+                    }
+                ]
             }
         }
     });
@@ -338,10 +345,17 @@
                 },
                 price: {
                     identifier: 'price',
-                    rules: [{
-                        type: 'empty',
-                        prompt: '请填写价格'
-                    }]
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: '请填写价格'
+                        },
+                        {
+                            type: 'regExp',
+                            value: /^\d{1,4}(?:\.\d{1})?$/,
+                            prompt: '大小不能超过10000元,只能保留一位小数'
+                        },
+                    ]
                 },
                 file: {
                     identifier: 'file',
