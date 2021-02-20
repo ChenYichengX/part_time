@@ -5,11 +5,12 @@ import com.chen.part_time.service.IUserService;
 import com.chen.part_time.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Random;
 
@@ -23,8 +24,11 @@ public class RegisterController {
 
     @Autowired
     private IUserService userService;
+
     @Autowired
-    private JavaMailSenderImpl javaMailSender;
+    private JavaMailSender javaMailSender;
+
+    private static Random random = new Random();
 
     private String host = "123.57.174.182";
     private int port = 6379;
@@ -56,11 +60,12 @@ public class RegisterController {
      */
     @PostMapping("/sendCode")
     @ResponseBody
-    public String sendCode(String email){
+    public String sendCode(String email, HttpServletRequest request){
         Jedis jedis = new Jedis(host,port);
         String code = getCode(6);
         //获取发送验证码的次数
-        String countKey = "verify_code:" + email + "count";
+        String ip = request.getRemoteAddr();
+        String countKey = ip + "_verify_code:" + email + "count";
         String count = jedis.get(countKey);
         if(count == null){
             //代表第一次
@@ -71,18 +76,28 @@ public class RegisterController {
             jedis.close();
             return "limit";
         }
+        // 发送验证码邮件
+        new Thread(() -> sendCode(email)).start();
+        //3.往 redis 中进行存储
+        String codeKey = ip + "_verify_code:"+email+":code";// key--->  verify_code:132546:code
+        jedis.setex(codeKey,90,code);
+        jedis.close();
+        return "true";
+    }
+
+    /**
+     * 发送验证码邮件
+     * @param email
+     */
+    private void sendCode(String email) {
+        String code = getCode(6);
         //将验证码发送到用户邮箱
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setSubject("验证码");
+        simpleMailMessage.setSubject("【南理兼职平台】-验证码");
         simpleMailMessage.setText("验证码为：" + code + "请于90秒内完成验证,过期无效！");
         simpleMailMessage.setTo(email);
         simpleMailMessage.setFrom("361415506@qq.com");
         javaMailSender.send(simpleMailMessage);
-        //3.往 redis 中进行存储
-        String codeKey = "verify_code:"+email+":code";// key--->  verify_code:132546:code
-        jedis.setex(codeKey,90,code);
-        jedis.close();
-        return "true";
     }
 
 
@@ -94,10 +109,11 @@ public class RegisterController {
      */
     @PostMapping("/verify")
     @ResponseBody
-    public String verifyCode(User user, String validate){
+    public String verifyCode(User user, String validate,HttpServletRequest request){
         //1.获取邮箱和验证码
         //2.从 redis 中获取邮箱号对应的验证码
-        String codeKey = "verify_code:" + user.getEmail() + ":code";// key--->  verify_code:132546:code
+        String ip = request.getRemoteAddr();
+        String codeKey = ip + "_verify_code:" + user.getEmail() + ":code";// key--->  verify_code:132546:code
         Jedis jedis = new Jedis(host,port);
         String code = jedis.get(codeKey);
         jedis.close();
@@ -117,10 +133,9 @@ public class RegisterController {
      * @param length
      * @return
      */
-    private String getCode(int length){
-        String code ="";
-        Random random = new Random();
-        for(int i=0;i<length;i++){
+    private static String getCode(int length){
+        String code = "";
+        for(int i = 0;i < length; i++){
             int rand = random.nextInt(10);
             code += rand;
         }

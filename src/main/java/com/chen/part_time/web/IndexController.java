@@ -298,7 +298,7 @@ public class IndexController {
         User merchant = userService.getUserByPart_time_id(id);
         // 发送邮件通知商家
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setSubject("通知");
+        simpleMailMessage.setSubject("【南理兼职平台】-通知");
         simpleMailMessage.setText("亲爱的" + merchant.getNickName() + ",刚刚" + u.getUsername() + "申请了您的一个职位,快去查看吧(*^_^*)");
         simpleMailMessage.setTo(merchant.getEmail());
         simpleMailMessage.setFrom("361415506@qq.com");

@@ -367,7 +367,7 @@ public class PartTimeController {
         User stu = userService.getUserById(stuId);
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setSubject("通知");
+            simpleMailMessage.setSubject("【南理兼职平台】-通知");
             simpleMailMessage.setText("亲爱的" + stu.getUsername() + ",刚刚商家" + merchant.getUsername() +
                     "的一个标题为 ’" + partTimeName + "‘ 的兼职选择您作为了兼职人，请尽快给他回复吧");
             simpleMailMessage.setTo(stu.getEmail());
@@ -394,7 +394,7 @@ public class PartTimeController {
         User stu = userService.getUserById(stuId);
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setSubject("通知");
+            simpleMailMessage.setSubject("【南理兼职平台】-通知");
             simpleMailMessage.setText("亲爱的" + stu.getUsername() + ",您的’" + partTimeName + "‘兼职已经开始。");
             simpleMailMessage.setTo(stu.getEmail());
             simpleMailMessage.setFrom("361415506@qq.com");
@@ -418,7 +418,7 @@ public class PartTimeController {
         User stu = userService.getUserById(stuId);
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setSubject("通知");
+            simpleMailMessage.setSubject("【南理兼职平台】-通知");
             simpleMailMessage.setText("亲爱的" + stu.getUsername() + ",您的’" + partTimeName + "‘兼职已经结束。");
             simpleMailMessage.setTo(stu.getEmail());
             simpleMailMessage.setFrom("361415506@qq.com");

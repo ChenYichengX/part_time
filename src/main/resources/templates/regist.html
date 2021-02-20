@@ -289,11 +289,11 @@
                 $("#email").focus();
             } else {
                 $.post("/register/sendCode",$("#codeForm").serialize(),function (data) {
-                    if(data=="true"){
-                        t=90;
+                    if(data == "true"){
+                        t = 90;
                         clearInterval(intetval);
-                        intetval=setInterval("refer()",1000);
-                    }else if(data=="limit"){
+                        intetval = setInterval("refer()",1000);
+                    }else if(data == "limit"){
                         clearInterval(intetval);
                         $("#countDown").text("一小时内只能发送3次");
                     }
