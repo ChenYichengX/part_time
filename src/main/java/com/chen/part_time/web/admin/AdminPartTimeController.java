@@ -166,7 +166,7 @@ public class AdminPartTimeController {
      */
     @PostMapping("partTime/input")
     public String AddPartTime(PartTime partTime,
-                              int price, int unit,
+                              String price, int unit,
                               @RequestParam(value = "file", required = false) MultipartFile file,
                               HttpSession session,
                               RedirectAttributes attributes) {
