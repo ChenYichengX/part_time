@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:写接口的全类名，相当于告诉 MyBatis 这个配置文件实现哪个接口 -->
+<mapper namespace="com.chen.part_time.dao.IBrowsingHistoryDao">
+    <!--    boolean addBrowsingHistory(BrowsingHistory browsingHistory);-->
+    <insert id="addBrowsingHistory">
+        insert into t_browsing_history(ip,url,username,class_method,browsing_time) values(#{ip},#{url},#{username},#{classMethod},#{browsing_time})
+    </insert>
+
+    <!--    List<BrowsingHistory> getAll();-->
+    <select id="getAll" resultType="com.chen.part_time.entity.BrowsingHistory">
+        select
+            id,
+            ip,
+            url,
+            username,
+            class_method as classMethod,
+            browsing_time
+        from t_browsing_history
+    </select>
+</mapper>

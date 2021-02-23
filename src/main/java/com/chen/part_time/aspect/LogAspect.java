@@ -1,15 +1,22 @@
 package com.chen.part_time.aspect;
 
+import com.chen.part_time.entity.Admin;
+import com.chen.part_time.entity.BrowsingHistory;
+import com.chen.part_time.entity.User;
+import com.chen.part_time.service.IBrowsingHistoryService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * @author 陈奕成
@@ -19,9 +26,12 @@ import java.util.Arrays;
 @Component
 public class LogAspect {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+//    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Pointcut("execution(* com.chen.part_time.web.*.*(..))")
+    @Autowired
+    private IBrowsingHistoryService browsingHistoryService;
+
+    @Pointcut("execution(* com.chen.part_time.web..*.*(..)) && !execution(* com.chen.part_time.web.CommonController.*(..))")
     public void log(){}
 
     @Before("log()")
@@ -30,15 +40,24 @@ public class LogAspect {
         HttpServletRequest request = attributes.getRequest();
         String url = request.getRequestURL().toString();
         String ip = request.getRemoteAddr();
+        HttpSession session = request.getSession();
+        Object user = session.getAttribute("user");
+        String username = "";
+        if(user == null){
+            username = "游客";
+        }else if(user instanceof Admin){
+            Admin u = (Admin) user;
+            username = u.getUsername();
+        }else if(user instanceof User){
+            User u = (User) user;
+            username = u.getUsername();
+        }
         String classMethod = joinPoint.getSignature().getDeclaringTypeName()+"."+joinPoint.getSignature().getName();
-        Object[] args = joinPoint.getArgs();
-        RequestLog requestLog = new RequestLog(url, ip, classMethod, args);
-
-        logger.info("-----doBefore-----");
-        logger.info("requestLog:"+requestLog);
+        BrowsingHistory browsingHistory = new BrowsingHistory(ip,url,username,classMethod,new Date());
+        browsingHistoryService.addBrowsingHistory(browsingHistory);
     }
 
-    @After("log()")
+    /*@After("log()")
     public void doAfter(){
         logger.info("-----doAfter-----");
     }
@@ -51,29 +70,6 @@ public class LogAspect {
     @AfterThrowing(throwing = "exception",pointcut = "log()")
     public void doException(Exception exception){
         logger.info("异常信息：" + exception.toString());
-    }
+    }*/
 
-    private class RequestLog{
-        private String url;
-        private String ip;
-        private String classMethod;
-        private Object[] args;
-
-        public RequestLog(String url, String ip, String classMethod, Object[] args) {
-            this.url = url;
-            this.ip = ip;
-            this.classMethod = classMethod;
-            this.args = args;
-        }
-
-        @Override
-        public String toString() {
-            return "RequestLog{" +
-                    "url='" + url + '\'' +
-                    ", ip='" + ip + '\'' +
-                    ", classMethod='" + classMethod + '\'' +
-                    ", args=" + Arrays.toString(args) +
-                    '}';
-        }
-    }
 }

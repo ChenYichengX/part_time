@@ -76,7 +76,6 @@ public class AdController {
      */
     @PostMapping("/ad")
     public String insertAd(Ad ad, MultipartFile file, HttpServletRequest request, RedirectAttributes attributes) {
-        System.out.println(ad.getTitle());
         HttpSession session = request.getSession();
         Admin user = (Admin) session.getAttribute("user");
         if (ad != null && ad.getId() != null) {

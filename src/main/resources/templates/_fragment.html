@@ -15,7 +15,7 @@
             <h2 class="ui teal header item">南理校内兼职</h2>
             <a href="index.html" th:href="@{/}" class="m-item right item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="home icon"></i>首页</a>
             <a href="type.html" th:href="@{/type}" class="m-item item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>分类</a>
-            <a href="#" class="m-item item m-mobile-hide"><i class="edit outline icon"></i>发布兼职信息</a>
+            <a href="javascript:void(0);" id="quickToInputPage" class="m-item item m-mobile-hide"><i class="edit outline icon"></i>发布兼职信息</a>
             <a href="regist.html" th:href="@{/register}" class="m-item item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="user plus icon"></i>注册</a>
             <a href="login.html" th:href="@{/merchant}" class="m-item item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i class="sign-in icon"></i>登录</a>
             <div class="right m-item menu m-mobile-hide" th:unless="${#strings.isEmpty(session.user?.username)}">
@@ -97,6 +97,23 @@
 
         $('.ui.dropdown').dropdown({
             on: 'hover'
+        });
+
+        $("#quickToInputPage").click(function () {
+            $.ajax({
+                url: "/quickToInputPage",
+                type: "get",
+                success: function (ref) {
+                    if(ref == "ok"){
+                        window.open("/partTime/input","_self");
+                    }else if(ref == "isStudent"){
+                        alert("学生暂时不能发布兼职！")
+                    }else if(ref == "noLogin"){
+                        alert("登录后，就可发布兼职信息！")
+                        window.open("/merchant","_self");
+                    }
+                }
+            })
         });
 
         $.ajax({

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
+ * 评论的接口
  * @author 陈奕成
  * @create 2021 02 06 22:05
  */

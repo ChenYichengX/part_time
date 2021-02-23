@@ -239,7 +239,7 @@ public class IndexController {
      * @param model
      * @return
      */
-    @GetMapping("/footer/partTime")
+/*    @GetMapping("/footer/partTime")
     public String newsFooter(Model model) {
         // 按时间排序
         PartTimeCondition partTime = new PartTimeCondition();
@@ -248,25 +248,8 @@ public class IndexController {
         PageInfo<MerchantPartTime> pageInfo = new PageInfo<>(allPartTime);
         model.addAttribute("latestFooter", pageInfo);
         return "_fragment :: partTimeDiv";
-    }
+    }*/
 
-    /**
-     * 渲染 footer 底部的最新兼职信息
-     *
-     * @return
-     */
-    @GetMapping("/footer/partTime2")
-    @ResponseBody
-    public Map<String, Object> newsFooter2() {
-        // 按时间排序
-        PartTimeCondition partTime = new PartTimeCondition();
-        PageHelper.startPage(1, 3);
-        List<MerchantPartTime> allPartTime = partTimeService.getAllPartTime(partTime);
-        PageInfo<MerchantPartTime> pageInfo = new PageInfo<>(allPartTime);
-        Map<String, Object> map = new HashMap<>();
-        map.put("latestFooter", pageInfo);
-        return map;
-    }
 
     /**
      * 申请兼职信息
@@ -331,6 +314,30 @@ public class IndexController {
         List<StuApplyInfoVo> applyInfo = applyService.getApplyInfoByStuId(u.getId());
         model.addAttribute("applyInfo",applyInfo);
         return "user";
+    }
+
+    @GetMapping("/quickToInputPage")
+    @ResponseBody
+    public String quickToInputPage(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        Object user = session.getAttribute("user");
+        if (user == null) { // 未登录,去登录
+            return "noLogin";
+        }
+        if (user instanceof Admin) { // 是管理员
+            return "isAdmin";
+        }
+        User u = null;
+        if (user instanceof User) {
+            u = (User) user;
+        }
+        if (u.getType() == 0) { // 是学生
+            return "isStudent";
+        }
+        if (u.getType() == 1) { // 是商家
+            return "ok";
+        }
+        return "bug";
     }
 
 }

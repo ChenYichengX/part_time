@@ -286,9 +286,6 @@ public class PartTimeController {
         List<ApplyInfoVo> applyInfoByUser_id = applyService.getApplyInfoByUser_id(user.getId());
         PageInfo<ApplyInfoVo> pageInfo = new PageInfo(applyInfoByUser_id, 5);
         model.addAttribute("applys", pageInfo);
-        for (ApplyInfoVo applyInfoVo : applyInfoByUser_id) {
-            System.out.println(applyInfoVo);
-        }
         return "merchant/jobs";
     }
 
@@ -304,9 +301,6 @@ public class PartTimeController {
         List<ApplyInfoVo> applyInfoByUser_id = applyService.getApplyInfoByUser_id(user.getId());
         PageInfo<ApplyInfoVo> pageInfo = new PageInfo(applyInfoByUser_id, 5);
         model.addAttribute("applys", pageInfo);
-        for (ApplyInfoVo applyInfoVo : applyInfoByUser_id) {
-            System.out.println(applyInfoVo);
-        }
         return "merchant/jobs :: applyList";
     }
 

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link href="../../static/css/me.css" rel="stylesheet" type="text/css" th:href="@{/css/me.css}">
+</head>
+<body>
+<!-- 导航 -->
+<nav th:replace="admin/admin_fragment :: menu(6)" class="ui inverted attached segment m-shadow-small">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">后台管理</h2>
+            <a href="#" class="m-item item m-mobile-hide"><i class="home icon"></i>兼职信息</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="idea icon"></i>分类</a>
+            <a href="#" class="m-item item m-mobile-hide active"><i class="tags icon"></i>支付方式</a>
+            <div class="right m-item menu m-mobile-hide">
+                <div class="ui dropdown item">
+                    <div class="text">
+                        <span th:text="${session.user.username}">小成</span>
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="#" th:href="@{/admin/logout}" class="item">注销</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+
+<!-- 中间内容 -->
+<div class="m-padded-tb-huge m-container">
+    <div class="ui container">
+        <div id="table-container">
+            <table th:fragment="browsingList" class="ui table">
+                <thead>
+                <tr class="center aligned">
+                    <th></th>
+                    <th>ip</th>
+                    <th>url</th>
+                    <th>访问者</th>
+                    <th>方法名</th>
+                    <th>浏览时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="center aligned" th:each="browsing,iterStat : ${browsings.list}">
+                    <td th:text="${iterStat.count}">1</td>
+                    <td th:text="${browsing.ip}">123.57.174.182</td>
+                    <td th:text="${browsing.url}">http://123.57.174.182:8081/</td>
+                    <td th:text="${browsing.username}">游客</td>
+                    <td th:text="${browsing.classMethod}">com.chen.part_time.web.IndexController.index</td>
+                    <td th:text="${#dates.format(browsing.browsing_time,'yyyy-MM-dd HH:mm:ss')}">2020-05-06 22:49</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th colspan="6">
+                        <div class="ui floated pagination menu" th:if="${browsings.pages} > 1">
+                            <span class="item">&nbsp;&nbsp;总共：<span th:text="${browsings.total}"></span>条记录&nbsp;&nbsp;&nbsp;&nbsp;当前页数：[<span th:text="${browsings.pageNum}"></span>/<span th:text="${browsings.pages}"></span>]&nbsp;&nbsp;</span>
+                            <a onclick="page(this)" th:attr="data-page=1" th:unless="${browsings.isFirstPage}" class="item">首页</a>
+                            <a onclick="page(this)" th:attr="data-page=${browsings.prePage}" th:unless="${browsings.isFirstPage}" class="item">上一页</a>
+                            <a onclick="page(this)" th:attr="data-page=${num}" th:each="num : ${browsings.navigatepageNums}" th:text="${num}" class="item" th:classappend="${browsings.pageNum == num} ? 'active'"></a>
+                            <a onclick="page(this)" th:attr="data-page=${browsings.nextPage}" th:unless="${browsings.isLastPage}" class="item">下一页</a>
+                            <a onclick="page(this)" th:attr="data-page=${browsings.pages}" th:unless="${browsings.isLastPage}" class="item">末页</a>
+                        </div>
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 底部 footer -->
+<footer th:replace="_fragment :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../../static/images/avatar.jpg" th:src="@{/img/avatar.jpg}"
+                             class="ui rounded image" alt="" style="width: 90px;">
+                    </div>
+                </div>
+            </div>
+            <div class="four wide column">
+                <h3 class="ui inverted header m-text-thin">最新兼职信息</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">用户故事 （User Story）</a>
+                    <a href="#" class="item">用户故事 （User Story）</a>
+                    <a href="#" class="item">用户故事 （User Story）</a>
+                </div>
+            </div>
+            <div class="five wide column">
+                <h3 class="ui inverted header m-text-thin">联系我</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">Email：chenbbion@outlook.com</a>
+                    <a href="#" class="item">QQ：361415506</a>
+                </div>
+            </div>
+            <div class="four wide column">
+                <h3 class="ui inverted header m-text-thin">广告投放</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item"> 详情及介绍 </a>
+                </div>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-opacity-mini">Copyright © 2020 - 2021 This part-time website Designed by ChenYicheng</p>
+    </div>
+</footer>
+<th:block th:replace="_fragment :: script">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</th:block>
+<script>
+    /**
+     * 下一页，上一页按钮触发
+     * @param node
+     */
+    function page(node) {
+        loadData($(node).data("page"));
+    }
+
+    /**
+     * Ajax 的异步请求，局部刷新页面
+     */
+    function loadData(page) {
+        $("#table-container").load("/admin/browsingHistory", {
+            page: page
+        });
+    }
+</script>
+</body>
+</html>
