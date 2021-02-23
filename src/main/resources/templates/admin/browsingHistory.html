@@ -50,7 +50,7 @@
                 </thead>
                 <tbody>
                 <tr class="center aligned" th:each="browsing,iterStat : ${browsings.list}">
-                    <td th:text="${iterStat.count}">1</td>
+                    <td th:text="${iterStat.index + 1 + (browsings.pageNum - 1) * 20}">1</td>
                     <td th:text="${browsing.ip}">123.57.174.182</td>
                     <td th:text="${browsing.url}">http://123.57.174.182:8081/</td>
                     <td th:text="${browsing.username}">游客</td>

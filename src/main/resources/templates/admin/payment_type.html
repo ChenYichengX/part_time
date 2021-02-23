@@ -129,13 +129,6 @@
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 </th:block>
 <script>
-    $('.menu.toggle').click(function () {
-        $('.m-item').toggleClass('m-mobile-hide');
-    });
-
-    $('.ui.dropdown').dropdown({
-        on: 'hover'
-    });
     // 删除的提示框
     function deletePayment(node) {
         var stuno = $(node).parent().parent().find("td:eq(1)").text();
