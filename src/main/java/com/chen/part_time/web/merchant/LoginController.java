@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -48,9 +49,10 @@ public class LoginController {
     @PostMapping("/login")
     public String login(@RequestParam String username,
                         @RequestParam String password,
-                        HttpSession session,
+                        HttpServletRequest request,
                         Model model,
                         RedirectAttributes attributes) {
+        HttpSession session = request.getSession();
         User user = userService.checkUser(new User(username, MD5Util.code(password)));
         if (user != null) {
             session.setAttribute("user", user);
