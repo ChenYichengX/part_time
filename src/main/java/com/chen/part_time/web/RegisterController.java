@@ -121,7 +121,10 @@ public class RegisterController {
             user.setCreateDate(new Date());
             String password = user.getPassword();
             user.setPassword(MD5Util.code(password));
-            userService.insertUser(user);
+            int i = userService.insertUser(user);
+            if(i == -1){ // 注册失败，用户名已存在
+                return "username";
+            }
             return "true";
         }else{
             return "false";

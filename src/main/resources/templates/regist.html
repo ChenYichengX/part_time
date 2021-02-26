@@ -315,11 +315,15 @@
                 $("#validate").focus();
             }else{
                 $.post("/register/verify",$("#codeForm").serialize(),function (data) {
-                    if(data=="true"){
+                    if(data == "true"){
                         clearInterval(intetval);
                         $("#countDown").text("");
                         alert("注册成功！");
                         window.open("/merchant/","_self");
+                    }else if(data == "username"){
+                        $("#result").attr("color","red");
+                        $("#result").text("用户名已存在，注册失败！");
+                        $("#username").focus();
                     }else{
                         $("#result").attr("color","red");
                         $("#result").text("验证不通过，注册失败！");

@@ -28,13 +28,10 @@
         </div>
     </div>
 </nav>
-<br>
+
 <div th:if="${#lists.isEmpty(applys.list)}">
-    <br>
-    <br>
-    <br>
+    <br><br><br><br><br>
 </div>
-<br>
 <!-- 中间内容 -->
 <div class="m-padded-tb-huge m-container">
     <div class="ui container">
@@ -113,12 +110,9 @@
         </div>
     </div>
 </div>
-<br>
 <div th:if="${#lists.isEmpty(applys.list)}">
-    <br>
-    <br>
+    <br><br><br>
 </div>
-<br>
 <!-- 底部 footer -->
 <footer th:replace="_fragment :: footer" class="ui inverted vertical segment m-padded-tb-massive">
     <div class="ui center aligned container">

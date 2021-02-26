@@ -340,4 +340,10 @@ public class IndexController {
         return "bug";
     }
 
+    @GetMapping("/toAdEg")
+    public String toAdEg(){
+        return "ad";
+    }
+
+
 }

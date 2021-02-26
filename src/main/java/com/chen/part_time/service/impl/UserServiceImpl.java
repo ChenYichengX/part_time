@@ -5,6 +5,7 @@ import com.chen.part_time.entity.User;
 import com.chen.part_time.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,8 +29,13 @@ public class UserServiceImpl implements IUserService {
         return userDao.checkUsername(username);
     }
 
+    @Transactional
     @Override
     public int insertUser(User user) {
+        int i = checkUsername(user.getUsername());
+        if(i > 0){ // 已存在
+            return -1;
+        }
         return userDao.insertUser(user);
     }
 
