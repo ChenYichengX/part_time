@@ -32,12 +32,12 @@
 
     <!-- boolean deleteOtherApply(Apply apply); -->
     <delete id="deleteOtherApply">
-        delete from t_apply_part_time where part_time_id = #{part_time_id}
+        delete from t_apply_part_time where part_time_id = #{part_time_id} and choose = 0
     </delete>
 
     <!-- int selectApply(Apply apply); -->
     <select id="selectApply" resultType="_int">
-        select count(id) from t_apply_part_time where part_time_id = #{part_time_id} and user_id = #{user_id}
+        select count(id) from t_apply_part_time where part_time_id = #{part_time_id} and user_id = #{user_id} and choose in(0,1,2)
     </select>
 
     <!--    查询申请记录（给商家显示）-->
@@ -79,7 +79,7 @@
                 over_time = #{over_time},
             </if>
         </set>
-        where user_id = #{user_id} and part_time_id = #{part_time_id}
+        where user_id = #{user_id} and part_time_id = #{part_time_id} and choose != 3
     </update>
 
     <!-- List<StuApplyInfoVo> getApplyInfoByStuId(Long stuId); -->
@@ -109,11 +109,12 @@
         from t_apply_part_time
         <where>
             <if test="user_id != null">
-                user_id = #{user_id}
+                and user_id = #{user_id}
             </if>
             <if test="part_time_id != null">
                 and part_time_id = #{part_time_id}
             </if>
         </where>
+        order by id desc
     </select>
 </mapper>

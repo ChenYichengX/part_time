@@ -34,5 +34,5 @@ public interface IApplyDao {
     List<StuApplyInfoVo> getApplyInfoByStuId(Long stuId);
 
     // 通过兼职 part_time_id 和 user_id 查询兼职状态
-    Apply getOneByApply(Apply apply);
+    List<Apply> getOneByApply(Apply apply);
 }

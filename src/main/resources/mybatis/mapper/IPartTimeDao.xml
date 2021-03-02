@@ -165,6 +165,6 @@
 
     <!--    boolean updateDoing(@Param("id") Long id, @Param("type") Integer type);-->
     <update id="updateDoing">
-        update t_part_time set doing = #{type} where id = #{id}
+        update t_part_time set doing = doing + #{type} where id = #{id}
     </update>
 </mapper>

@@ -21,11 +21,7 @@ public class PartTime {
     private Date updateDate; // 更新时间
     private String firstPicture; // 图片地址
     private Integer views; // 浏览次数
-    private Integer doing; // 0是发布状态，1是已兼职。是否已兼职
-
-
-    public static final Integer DOING_PART_TIME = 1;
-    public static final Integer DOING_NO = 0;
+    private Integer doing; // 已兼职人数
 
     public PartTime() {
     }

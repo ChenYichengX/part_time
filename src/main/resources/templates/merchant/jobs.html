@@ -50,9 +50,7 @@
                         <td>类型：<span th:text="${applyInfoVo.type_name}">外卖员</span></td>
                         <td>工资：<span th:text="${applyInfoVo.price}">2元/单</span></td>
                         <td>
-                            <a href="#" th:if="${applyInfoVo.doing} == 0" onclick="return deletePartTime(this)"
-                               th:href="@{/merchant/partTime/{id}/delApply(id=${applyInfoVo.part_time_id})}"
-                               class="ui mini red basic button">删除</a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </td>
                     </tr>
                     <tr class="center aligned responsiveTr" style="height: 52px;" th:each="applyStu : ${applyInfoVo.stus}"
@@ -211,7 +209,6 @@
             $(node).parent().parent().unbind("mouseenter").unbind("mouseleave");
             $(node).parent().parent().removeClass('trHover');
             $(node).parent().parent().children("td").eq(3).append($("<button class='ui mini button teal' onclick='startJob(this)'>开始兼职</button>"));
-            $(node).parent().parent().parent().children('tr:eq(0)').children("td:eq(4)").html("");
             $(node).parent().html("");
         }
     }
@@ -235,8 +232,9 @@
                     if (ref == "success") {
                         let now = new Date();
                         let s = dateToString(now);
-                        $(node).parent().parent().children("td").eq(4).append($("<button class='ui mini button teal'>结束兼职</button>"));
-                        $(node).parent().html('开始时间：' + s);
+                        $(node).parent().parent().children("td").eq(4).append($("<button class='ui mini button teal' onclick='overJob(this)'>结束兼职</button>"));
+                        $(node).hide();
+                        $(node).parent().append($("<div>" + "开始时间：" + s + "</div>"));
                     } else {
                         alert('开始兼职失败，请联系管理员');
                     }

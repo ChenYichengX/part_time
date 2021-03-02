@@ -50,7 +50,7 @@ public class ApplyServiceImpl implements IApplyService {
     }
 
     @Override
-    public Apply getOneByApply(Apply apply) {
+    public List<Apply> getOneByApply(Apply apply) {
         return applyDao.getOneByApply(apply);
     }
 }

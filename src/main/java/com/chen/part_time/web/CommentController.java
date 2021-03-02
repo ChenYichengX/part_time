@@ -59,11 +59,12 @@ public class CommentController {
         }
         // 查询当前用户该兼职的兼职状态
         Apply apply = new Apply(comment.getPartTimeId(), u.getId());
-        Apply oneByApply = applyService.getOneByApply(apply);
-        if (apply == null) {
+        List<Apply> oneByApply = applyService.getOneByApply(apply);
+
+        if(oneByApply == null || oneByApply.size() == 0){
             return "只有开始兼职的人才可以评论哦！！！";
         }
-        if (oneByApply.getChoose() < Apply.CHOOSE_STARTED) {
+        if (oneByApply.get(0).getChoose() < Apply.CHOOSE_STARTED) {
             // 说明不可以评论
             return "等开始兼职了就可以评论啦！！！";
         }

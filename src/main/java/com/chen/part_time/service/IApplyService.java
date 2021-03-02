@@ -25,12 +25,12 @@ public interface IApplyService {
     // 查询申请记录（给商家显示）
     List<ApplyInfoVo> getApplyInfoByUser_id(Long user_id);
 
-    // 将学生的选择状态改为1
+    // 修改学生的选择状态
     boolean updateStuChoose(Apply apply);
 
     // 查询兼职记录（通过学生id）
     List<StuApplyInfoVo> getApplyInfoByStuId(Long stuId);
 
     // 通过兼职 part_time_id 和 user_id 查询兼职状态
-    Apply getOneByApply(Apply apply);
+    List<Apply> getOneByApply(Apply apply);
 }

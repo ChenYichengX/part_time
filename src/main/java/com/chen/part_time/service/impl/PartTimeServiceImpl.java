@@ -65,6 +65,7 @@ public class PartTimeServiceImpl implements IPartTimeService {
         partTimeDao.addViewsById(id);
     }
 
+    @Transactional
     @Override
     public boolean updateDoing(Long id, Integer type) {
         return partTimeDao.updateDoing(id,type);

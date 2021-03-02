@@ -245,11 +245,35 @@ public class PartTimeController {
     public String deleteFile(@PathVariable Long id, RedirectAttributes attributes, HttpServletRequest request) {
         HttpSession session = request.getSession();
         User merchant = (User) session.getAttribute("user");
+        // 判断该兼职是否可删
+        List<Apply> oneByApply = applyService.getOneByApply(new Apply(id, null));
+        for (Apply apply : oneByApply) {
+            if(apply.getChoose() > Apply.CHOOSE_UNSELECTED && apply.getChoose() != Apply.CHOOSE_OVER){
+                attributes.addFlashAttribute("message", "删除失败,该兼职已选择了学生，不可删除");
+                return "redirect:/merchant/partTimes";
+            }
+        }
         PartTimeCondition partTimeCondition = new PartTimeCondition();
         partTimeCondition.setUser_id(merchant.getId());
         List<MerchantPartTime> allPartTime = partTimeService.getAllPartTime(partTimeCondition);
         for (MerchantPartTime merchantPartTime : allPartTime) {
             if (merchantPartTime.getId().equals(id)) {
+                // 获取所有申请人的信息
+                List<User> stus = userService.getUsersByPart_time_id(id);
+                if(stus != null && stus.size() > 0){
+                    // 发送通知
+                    for (User user : stus) {
+                        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+                        simpleMailMessage.setSubject("通知");
+                        simpleMailMessage.setText("亲爱的" + user.getNickName() + ",刚刚" + merchant.getUsername() + "删除了标题为" + merchantPartTime.getTitle() + ",类型为" +
+                                merchantPartTime.getType_name() + "的兼职信息,您的申请已无效{{{(>_<)}}},快去看看又有哪些新的兼职吧");
+                        simpleMailMessage.setTo(user.getEmail());
+                        simpleMailMessage.setFrom("361415506@qq.com");
+                        javaMailSender.send(simpleMailMessage);
+                    }
+                    // 删除申请记录
+                    applyService.deleteOtherApply(new Apply(id, null));
+                }
                 // 删除图片
                 File picture = new File(basePath, merchantPartTime.getFirstPicture());
                 picture.delete();
@@ -306,17 +330,23 @@ public class PartTimeController {
 
     /**
      * 删除有人申请的兼职信息,并通知申请人
-     *
      * @param id
      * @param attributes
      * @return
      */
-    @GetMapping("/partTime/{id}/delApply")
+    /*@GetMapping("/partTime/{id}/delApply")
     public String deleteFileAndApply(@PathVariable Long id, RedirectAttributes attributes, HttpServletRequest request) {
         // 获取商家信息
         HttpSession session = request.getSession();
         User merchant = (User) session.getAttribute("user");
-
+        // 判断该兼职是否可删
+        List<Apply> oneByApply = applyService.getOneByApply(new Apply(id, null));
+        for (Apply apply : oneByApply) {
+            if(apply.getChoose() > 0){
+                attributes.addFlashAttribute("message", "删除失败,该兼职已选择了学生，不可删除");
+                return "redirect:/merchant/apply";
+            }
+        }
         PartTimeCondition partTimeCondition = new PartTimeCondition();
         partTimeCondition.setUser_id(merchant.getId());
         List<MerchantPartTime> allPartTime = partTimeService.getAllPartTime(partTimeCondition);
@@ -337,8 +367,7 @@ public class PartTimeController {
                     simpleMailMessage.setFrom("361415506@qq.com");
                     javaMailSender.send(simpleMailMessage);
                 }
-                // 删除申请记录
-                applyService.deleteOtherApply(new Apply(id, null));
+
                 // 删除数据库的记录
                 boolean b = partTimeService.deletePartTime(id);
                 if (b) {
@@ -351,7 +380,7 @@ public class PartTimeController {
         }
         attributes.addFlashAttribute("message", "删除失败，该兼职信息不存在");
         return "redirect:/merchant/apply";
-    }
+    }*/
 
     @GetMapping("/choose")
     @ResponseBody
@@ -372,9 +401,6 @@ public class PartTimeController {
             Apply apply = new Apply(partTimeId, stuId);
             apply.setChoose(Apply.CHOOSE_SELECTED);
             applyService.updateStuChoose(apply);
-
-            // 将兼职信息状态更新为 1（已兼职状态）
-            partTimeService.updateDoing(partTimeId,PartTime.DOING_PART_TIME);
         } catch (MailException e) {
             e.printStackTrace();
             return "error";
