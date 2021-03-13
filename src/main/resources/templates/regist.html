@@ -249,7 +249,7 @@
         var regx = /^\w+@\w+(\.[a-zA-Z]{2,3}){1,2}$/;
         if(!regx.test(value)){
             $("#countDown").attr("color","red");
-            $("#countDown").text("请您填写邮箱域名:@域名，如good@tom.com");
+            $("#countDown").text("请您填写正确邮箱:@域名，如good@tom.com");
             $("#email").attr("validateStatus",false);
             return false;
         }
