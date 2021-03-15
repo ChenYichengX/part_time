@@ -77,7 +77,7 @@ public class RegisterController {
             return "limit";
         }
         // 发送验证码邮件
-        new Thread(() -> sendCode(email)).start();
+        new Thread(() -> sendCode(email,code)).start();
         //3.往 redis 中进行存储
         String codeKey = ip + "_verify_code:"+email+":code";// key--->  verify_code:132546:code
         jedis.setex(codeKey,90,code);
@@ -89,8 +89,7 @@ public class RegisterController {
      * 发送验证码邮件
      * @param email
      */
-    private void sendCode(String email) {
-        String code = getCode(6);
+    private void sendCode(String email,String code) {
         //将验证码发送到用户邮箱
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setSubject("【南理兼职平台】-验证码");
