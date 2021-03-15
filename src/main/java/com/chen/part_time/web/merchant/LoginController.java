@@ -68,7 +68,7 @@ public class LoginController {
             model.addAttribute("types",typeService.getAllType());
             return "merchant/partTime";
         } else {
-            attributes.addFlashAttribute("message","用户名和密码错误");
+            attributes.addFlashAttribute("message","用户名或密码错误");
             return "redirect:/merchant";
         }
     }
