@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author 陈奕成
@@ -343,6 +341,20 @@ public class IndexController {
     @GetMapping("/toAdEg")
     public String toAdEg(){
         return "ad";
+    }
+
+    /**
+     * 去申述界面
+     * @param id
+     * @return
+     */
+    @GetMapping("/complaint")
+    public String complaint(Long id,Model model){
+        MerchantPartTime partTimeById = partTimeService.getPartTimeById(id); // 兼职信息
+        User userByPart_time_id = userService.getUserByPart_time_id(id); // 商家信息
+        model.addAttribute("partTime",partTimeById);
+        model.addAttribute("merchantInfo",userByPart_time_id);
+        return "complaint";
     }
 
 

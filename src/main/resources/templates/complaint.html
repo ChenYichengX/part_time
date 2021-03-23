@@ -3,8 +3,7 @@
 <head th:replace="_fragment :: head(~{::title})">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>个人中心</title>
+    <title>申述</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <link rel="stylesheet" href="../static/css/me.css">
 </head>
@@ -41,43 +40,39 @@
                 <div class="header">提示</div>
                 <p th:text="${message}">兼职开始后，方可评价</p>
             </div>
-            <table class="ui table">
-                <thead>
-                <tr class="center aligned">
-                    <th>标题</th>
-                    <th>类型</th>
-                    <th>价格</th>
-                    <th>结算方式</th>
-                    <th>申请时间</th>
-                    <th>目前状态</th>
-                    <th>开始时间</th>
-                    <th>结束时间</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tr class="center aligned" th:each="apply : ${applyInfo}">
-                    <td th:text="${apply.title}">web前端</td>
-                    <td th:text="${apply.typeName}">其他</td>
-                    <td th:text="${apply.price}">200元/次</td>
-                    <td th:text="${apply.payName}">周结</td>
-                    <td th:text="${#dates.format(apply.apply_time,'yyyy-MM-dd HH:mm:ss')}">2020-12-7 17:34:12</td>
-                    <td>
-                        <span th:switch="${apply.choose}">
-                            <span th:case="0">待确认</span>
-                            <span th:case="1">已确认</span>
-                            <span th:case="2">已开始</span>
-                            <span th:case="3">已结束</span>
-                        </span>
-                    </td>
-                    <td><span th:text="${#dates.format(apply.start_time,'yyyy-MM-dd HH:mm:ss')}"></span></td>
-                    <td><span th:text="${#dates.format(apply.start_time,'yyyy-MM-dd HH:mm:ss')}"></span></td>
-                    <td>
-                        <label class="ui label" th:if="${apply.choose} == 0 or ${apply.choose} == 1">不可评价</label>
-                        <button onclick="toPartTimeInfo(this)" th:attr="data-id=${apply.partTimeId}" class="ui button mini teal" th:if="${apply.choose} == 2 or ${apply.choose} == 3">评价</button>
-                        <button onclick="complaint(this)" th:attr="data-id=${apply.partTimeId}" class="ui button mini teal" th:if="${apply.choose} == 2 or ${apply.choose} == 3">申述</button>
-                    </td>
-                </tr>
-            </table>
+            <div class="ui attached positive message">
+                <div class="ui middle aligned grid">
+                    <!-- 博客信息 -->
+                    <div class="eleven wide column">
+                        <ui class="list">
+                            <li>兼职标题：<span th:text="${partTime.title}">小伟</span></li>
+                            <li>工作内容：<span th:text="${partTime.content}">2020-05-05 09:08</span></li>
+                            <li>要求：<span th:text="${partTime.require_text}">13038779806</span></li>
+                            <li>待遇：<span th:text="${partTime.treatment}">361415506@qq.com</span></li>
+                        </ui>
+                    </div>
+                    <!-- 商家信息 -->
+                    <div class="eleven wide column">
+                        <ui class="list">
+                            <li>商家：<span th:text="${merchantInfo.nickName}">小伟</span></li>
+                            <li>发表时间：<span th:text="${#dates.format(partTime.updateDate,'yyyy-MM-dd HH:mm:ss')}">2020-05-05 09:08</span></li>
+                            <li>联系方式：<span th:text="${merchantInfo.phone}">13038779806</span></li>
+                            <li>邮箱：<span th:text="${merchantInfo.email}">361415506@qq.com</span></li>
+                        </ui>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div id="comment-form" class="ui form fifteen wide column">
+                <input type="hidden" name="partTimeId" th:value="${partTime.id}">
+                <div class="field">
+                    <textarea style="resize:none;" name="content" placeholder="请描述要申述的内容..."></textarea>
+                </div>
+                <div class="field m-mobile-wide m-margin-buttom-mini">
+                    <button id="commentPost-btn" type="button" class="ui teal button m-mobile-wide"><i class="edit icon"></i>提交</button>
+                </div>
+                <div class="ui error message"></div>
+            </div>
         </div>
     </div>
 </div>
@@ -125,32 +120,24 @@
 </th:block>
 <script>
 
-    // 申述
-    function complaint(node) {
-        let id = $(node).data("id");
-        window.open("/complaint?id=" + id);
-    }
+    $('.ui.form').form({
+        fields : {
+            content : {
+                identifier : 'content',
+                rules : [
+                    {
+                        type: 'empty',
+                        prompt: '请描述要申述的内容'
+                    },
+                    {
+                        type: 'maxLength[220]',
+                        prompt: '申述字数需在 220 个字符以内'
+                    }
+                ]
+            }
+        }
+    });
 
-    // 去兼职详情页面评论
-    function toPartTimeInfo(node) {
-        let id = $(node).data("id");
-        window.open("/partTime/"+id,"name");
-    }
-
-    /**
-     * 下一页，上一页按钮触发
-     * @param node
-     */
-    function page(node) {
-        loadData($(node).data("page"),$(node).data("id"));
-    }
-
-    /**
-     * Ajax 的异步请求，局部刷新页面
-     */
-    function loadData(pm,id) {
-        window.open("/type/" + id + "?page=" + pm,"_self");
-    }
 </script>
 </body>
 </html>
