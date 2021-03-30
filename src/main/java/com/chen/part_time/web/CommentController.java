@@ -31,6 +31,12 @@ public class CommentController {
     @Autowired
     private IApplyService applyService;
 
+    /**
+     * 查询兼职的评论
+     * @param id
+     * @param model
+     * @return
+     */
     @GetMapping("/comments/{id}")
     public String getCommentByPartTimeId(@PathVariable("id") Long id, Model model) {
         Comment comment = new Comment();
@@ -40,6 +46,12 @@ public class CommentController {
         return "partTime :: commentList";
     }
 
+    /**
+     * 发布评论
+     * @param comment
+     * @param session
+     * @return
+     */
     @PostMapping("/comments")
     @ResponseBody
     public String submitPost(Comment comment, HttpSession session) {

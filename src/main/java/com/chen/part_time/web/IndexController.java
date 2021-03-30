@@ -343,19 +343,4 @@ public class IndexController {
         return "ad";
     }
 
-    /**
-     * 去申述界面
-     * @param id
-     * @return
-     */
-    @GetMapping("/complaint")
-    public String complaint(Long id,Model model){
-        MerchantPartTime partTimeById = partTimeService.getPartTimeById(id); // 兼职信息
-        User userByPart_time_id = userService.getUserByPart_time_id(id); // 商家信息
-        model.addAttribute("partTime",partTimeById);
-        model.addAttribute("merchantInfo",userByPart_time_id);
-        return "complaint";
-    }
-
-
 }

@@ -138,6 +138,34 @@
         }
     });
 
+    $('#commentPost-btn').click(function () {
+        var boo = $('.ui.form').form('validate form');
+        if(boo){
+            postDate();
+        }else{
+            console.log("校验失败");
+        }
+    });
+
+    function postDate() {
+        let content = $("[name='content']").val();
+        $.ajax({
+            url: "/complaint",
+            type: "post",
+            data: {
+                "content": content,
+                "partTimeId" : $("[name='partTimeId']").val()
+            },
+            success: function(ref){
+                if(ref == "success"){
+                    // 申述成功
+                }else {
+                    alert(ref);
+                }
+            }
+        });
+    }
+
 </script>
 </body>
 </html>
