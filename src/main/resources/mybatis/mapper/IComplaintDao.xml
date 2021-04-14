@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:写接口的全类名，相当于告诉 MyBatis 这个配置文件实现哪个接口 -->
+<mapper namespace="com.chen.part_time.dao.IComplaintDao">
+
+    <!--    boolean addComplaint(Complaint complaint);-->
+    <insert id="addComplaint">
+        insert into t_complaint(part_time_id,user_id,content) values(#{partTimeId},#{userId},#{content})
+    </insert>
+
+    <!--   List<Complaint> getAllByComplaint(Complaint complaint); -->
+    <select id="getAllByComplaint" resultType="com.chen.part_time.vo.ComplaintVo">
+        SELECT
+        t1.id,
+        t4.username merchantName,
+        t2.title,
+        t3.username studentName,
+        t1.content,
+        t1.flag
+        FROM
+        t_complaint t1
+        left join t_part_time t2 on t1.part_time_id = t2.id
+        left join t_user t4 on t2.user_id = t4.id
+        LEFT JOIN t_user t3 ON t3.id = t1.user_id
+        <where>
+            <if test="merchantName != null and merchantName != ''">
+                t4.username like '%' #{merchantName} '%'
+            </if>
+            <if test="title != null and title != ''">
+                and t2.title like '%' #{title} '%'
+            </if>
+            <if test="flag != null">
+                and t1.flag = #{flag}
+            </if>
+        </where>
+    </select>
+
+    <update id="editFlag">
+        update t_complaint set flag = 1 where id = #{id}
+    </update>
+</mapper>

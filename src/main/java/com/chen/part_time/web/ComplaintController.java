@@ -2,8 +2,8 @@ package com.chen.part_time.web;
 
 import com.chen.part_time.entity.Complaint;
 import com.chen.part_time.entity.User;
+import com.chen.part_time.service.IComplaintService;
 import com.chen.part_time.service.IPartTimeService;
-import com.chen.part_time.service.ITypeService;
 import com.chen.part_time.service.IUserService;
 import com.chen.part_time.vo.MerchantPartTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +29,9 @@ public class ComplaintController {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private IComplaintService complaintService;
+
     /**
      * 去申述界面
      * @param id
@@ -51,6 +54,16 @@ public class ComplaintController {
     @ResponseBody
     public String submitComplaint(Complaint complaint, HttpSession session) {
         System.out.println(complaint);
-        return "";
+        Object user = session.getAttribute("user");
+        if(user instanceof User){
+            User u = (User) user;
+            complaint.setUserId(u.getId());
+        }
+        try {
+            complaintService.addComplaint(complaint);
+        } catch (Exception e) {
+            return "申述失败，请联系管理员!";
+        }
+        return "success";
     }
 }

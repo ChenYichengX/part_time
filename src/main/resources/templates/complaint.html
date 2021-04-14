@@ -159,6 +159,8 @@
             success: function(ref){
                 if(ref == "success"){
                     // 申述成功
+                    alert("申述成功");
+                    window.history.go(-1);
                 }else {
                     alert(ref);
                 }

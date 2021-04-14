@@ -12,6 +12,15 @@ public class Complaint {
     private String content; // 申述内容
     private Long userId; // 学生 id
     private String username; // 学生昵称
+    private int flag; // 默认0：未处理；1：已处理
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
 
     public Long getId() {
         return id;
