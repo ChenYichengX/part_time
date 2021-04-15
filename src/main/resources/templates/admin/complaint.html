@@ -79,25 +79,25 @@
         <div id="table-container">
             <table th:fragment="complaintList" class="ui table">
                 <thead>
-                <tr>
-                    <th></th>
-                    <th>商家</th>
-                    <th>标题</th>
-                    <th>申述人</th>
-                    <th>申述内容</th>
-                    <th>操作</th>
+                <tr class="center aligned">
+                    <th class="one wide"></th>
+                    <th class="two wide">商家</th>
+                    <th class="three wide">标题</th>
+                    <th class="two wide">申述人</th>
+                    <th class="six wide">申述内容</th>
+                    <th class="two wide">操作</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="complaint,iterStat : ${info.list}">
+                <tr th:each="complaint,iterStat : ${info.list}" class="center aligned">
                     <td th:text="${iterStat.count}">1</td>
                     <td th:text="${complaint.merchantName}">商家</td>
                     <td th:text="${complaint.title}">2食堂2楼小炒菜招外卖员</td>
                     <td th:text="${complaint.studentName}">申述人</td>
-                    <td th:text="${complaint.content}" th:title="${complaint.content}">申述内容</td>
+                    <td th:text="${#strings.length(complaint.content)} > 28 ? ${#strings.abbreviate(complaint.content,25)} : ${complaint.content}" th:title="${complaint.content}">申述内容</td>
                     <td>
-                        <a href="#" onclick="return deletePartTime(this)" th:href="@{/admin/complaint/{id}(id=${complaint.id})}"
-                           class="ui mini red basic button">处理</a>
+                        <label class="ui label" th:if="${complaint.flag} == 1">已处理</label>
+                        <button class="ui mini teal basic button" onclick="dealWithComplaint(this)" th:attr="data-id=${complaint.id}" th:if="${complaint.flag} == 0">处理</button>
                     </td>
                 </tr>
                 </tbody>
@@ -199,10 +199,24 @@
         $(this).closest('.message').transition('fade');
     });
 
-    function deletePartTime(node) {
-        var stuno = $(node).parent().parent().find("td:eq(2)").text();
-        var b = confirm("确定删除标题为 " + stuno + " 的兼职信息吗？");
-        return b;
+    // 处理
+    function dealWithComplaint(node) {
+        var b = confirm("确定将该申述信息标记为已处理吗？");
+        if (!b) {
+            return;
+        }
+        var id = $(node).data('id');
+        $.ajax({
+            url: '/admin/complaint/' + id,
+            type: 'put',
+            data: {},
+            success: function (ref) {
+                if(ref == 'success'){
+                    $(node).hide();
+                    $(node).parent().append($("<label class='ui label'>已处理</label>"));
+                }
+            }
+        })
     }
 
 </script>

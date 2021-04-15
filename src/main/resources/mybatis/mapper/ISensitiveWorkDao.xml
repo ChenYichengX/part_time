@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:写接口的全类名，相当于告诉 MyBatis 这个配置文件实现哪个接口 -->
+<mapper namespace="com.chen.part_time.dao.ISensitiveWorkDao">
+
+
+    <!--    boolean addSensitiveWork(SensitiveWork sensitiveWork);-->
+    <insert id="addSensitiveWork">
+        insert into t_sensitive_work(work) values(#{work})
+    </insert>
+
+    <!--    List<SensitiveWork> getList(SensitiveWork sensitiveWork);-->
+    <select id="getList" resultType="com.chen.part_time.entity.SensitiveWork">
+        select * from t_sensitive_work
+        <where>
+            <if test="level != null and level != 0">
+                level = #{level}
+            </if>
+        </where>
+    </select>
+</mapper>
