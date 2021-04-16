@@ -29,4 +29,15 @@ public class SensitiveWorkServiceImpl implements ISensitiveWorkService {
     public List<SensitiveWork> getList(SensitiveWork sensitiveWork) {
         return sensitiveWorkDao.getList(sensitiveWork);
     }
+
+    @Override
+    public Integer getCountByWork(String work) {
+        return sensitiveWorkDao.getCountByWork(work);
+    }
+
+
+    @Override
+    public boolean deleteWork(Long id) {
+        return sensitiveWorkDao.deleteWork(id);
+    }
 }

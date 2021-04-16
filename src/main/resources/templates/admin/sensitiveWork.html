@@ -35,6 +35,7 @@
 <div class="ui attached pointing menu">
     <div class="ui container">
         <div class="right menu">
+            <a href="" th:href="@{/admin/sensitive/input}" class="item">新增</a>
             <a href="partTime.html" th:href="@{/admin/sensitive}" class="teal item active">列表</a>
         </div>
     </div>
@@ -73,14 +74,15 @@
                     <td th:text="${iterStat.count}">1</td>
                     <td th:text="${sensitive.work}">商家</td>
                     <td>
-                        <button class="ui mini red basic button" onclick="dealWithComplaint(this)" th:attr="data-id=${sensitive.id}">删除</button>
+                        <a href="#" onclick="return deleteSensitiveWork(this)" th:href="@{/admin/sensitive/{id}/delete(id=${sensitive.id})}"
+                           class="ui mini red basic button">删除</a>
                     </td>
                 </tr>
                 </tbody>
                 <tfoot>
                 <tr>
                     <th colspan="7">
-                        <div class="ui floated pagination menu" th:if="${info.pages} > 1">
+                        <div class="ui floated pagination menu" th:if="${info.pages} >= 1">
                             <span class="item">&nbsp;&nbsp;总共：<span th:text="${info.total}"></span>条记录&nbsp;&nbsp;&nbsp;&nbsp;当前页数：[<span th:text="${info.pageNum}"></span>/<span th:text="${info.pages}"></span>]&nbsp;&nbsp;</span>
                             <a onclick="page(this)" th:attr="data-page=1" th:unless="${info.isFirstPage}" class="item">首页</a>
                             <a onclick="page(this)" th:attr="data-page=${info.prePage}" th:unless="${info.isFirstPage}" class="item">上一页</a>
@@ -88,6 +90,7 @@
                             <a onclick="page(this)" th:attr="data-page=${info.nextPage}" th:unless="${info.isLastPage}" class="item">下一页</a>
                             <a onclick="page(this)" th:attr="data-page=${info.pages}" th:unless="${info.isLastPage}" class="item">末页</a>
                         </div>
+                        <a href="#" th:href="@{/admin/sensitive/input}" class="ui right floated teal basic button">新增</a>
                     </th>
                 </tr>
                 </tfoot>
@@ -159,7 +162,7 @@
      */
     function loadData() {
         $("#table-container").load("/admin/sensitive/list", {
-            work: $("[name='work']").val(),
+            work: $("[name='work']").val().trim(),
             page: $("[name='page']").val()
         });
     }
@@ -170,23 +173,10 @@
     });
 
     // 处理
-    function dealWithComplaint(node) {
-        var b = confirm("确定将该申述信息标记为已处理吗？");
-        if (!b) {
-            return;
-        }
-        var id = $(node).data('id');
-        $.ajax({
-            url: '/admin/complaint/' + id,
-            type: 'put',
-            data: {},
-            success: function (ref) {
-                if(ref == 'success'){
-                    $(node).hide();
-                    $(node).parent().append($("<label class='ui label'>已处理</label>"));
-                }
-            }
-        })
+    function deleteSensitiveWork(node) {
+        var stuno = $(node).parent().parent().find("td:eq(2)").text();
+        var b = confirm("确定删除 " + stuno + " 敏感词吗？");
+        return b;
     }
 
 </script>

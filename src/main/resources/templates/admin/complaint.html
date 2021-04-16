@@ -104,7 +104,7 @@
                 <tfoot>
                 <tr>
                     <th colspan="7">
-                        <div class="ui floated pagination menu" th:if="${info.pages} > 1">
+                        <div class="ui floated pagination menu" th:if="${info.pages} >= 1">
                             <span class="item">&nbsp;&nbsp;总共：<span th:text="${info.total}"></span>条记录&nbsp;&nbsp;&nbsp;&nbsp;当前页数：[<span th:text="${info.pageNum}"></span>/<span th:text="${info.pages}"></span>]&nbsp;&nbsp;</span>
                             <a onclick="page(this)" th:attr="data-page=1" th:unless="${info.isFirstPage}" class="item">首页</a>
                             <a onclick="page(this)" th:attr="data-page=${info.prePage}" th:unless="${info.isFirstPage}" class="item">上一页</a>
@@ -183,8 +183,8 @@
      */
     function loadData() {
         $("#table-container").load("/admin/complaint/search", {
-            title: $("[name='title']").val(),
-            merchantName: $("[name='merchantName']").val(),
+            title: $("[name='title']").val().trim(),
+            merchantName: $("[name='merchantName']").val().trim(),
             flag: $("[name='flag']").val(),
             page: $("[name='page']").val()
         });

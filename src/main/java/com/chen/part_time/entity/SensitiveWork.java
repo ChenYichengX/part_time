@@ -8,6 +8,18 @@ package com.chen.part_time.entity;
  */
 public class SensitiveWork {
 
+    public SensitiveWork() {
+    }
+
+    public SensitiveWork(Long id, String work) {
+        this.id = id;
+        this.work = work;
+    }
+
+    public SensitiveWork(String work) {
+        this.work = work;
+    }
+
     private Long id;
 
     private String work; // 敏感词

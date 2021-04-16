@@ -2,6 +2,7 @@ package com.chen.part_time.web.merchant;
 
 import com.chen.part_time.entity.*;
 import com.chen.part_time.service.*;
+import com.chen.part_time.util.ValidatePartTimeUtil;
 import com.chen.part_time.vo.ApplyInfoVo;
 import com.chen.part_time.vo.MerchantPartTime;
 import com.chen.part_time.vo.TypeVo;
@@ -163,7 +164,8 @@ public class PartTimeController {
                               @RequestParam(value = "file", required = false) MultipartFile file,
                               HttpSession session,
                               HttpServletRequest request,
-                              RedirectAttributes attributes) {
+                              RedirectAttributes attributes,
+                              Model model) {
         String priceStr = "";
         priceStr += price; // 将价格拼串；拼成 5元/单
         priceStr += "元/";
@@ -178,6 +180,13 @@ public class PartTimeController {
         partTime.setPublishDate(new Date());
         User user = (User) session.getAttribute("user");
         partTime.setUser_id(user.getId());
+        // 审核兼职信息
+        String s = ValidatePartTimeUtil.validatePartTime(partTime);
+        if(!s.equals("审核通过")){ // 审核不通过
+            model.addAttribute("message", s);
+            model.addAttribute("partTime", partTime);
+            return "merchant/partTime-input";
+        }
         if (partTime.getId() != null) { // 表示是修改
             partTime.setUpdateDate(new Date()); // 设置更新时间
             boolean b = false;

@@ -18,6 +18,20 @@
             <if test="level != null and level != 0">
                 level = #{level}
             </if>
+            <if test="work != null and work != ''">
+                and work like '%' #{work} '%'
+            </if>
         </where>
     </select>
+
+
+    <!--    Integer getCountByWork(String work);-->
+    <select id="getCountByWork" resultType="int">
+        select count(1) from t_sensitive_work where work = #{work}
+    </select>
+
+    <!--    boolean deleteWork(Long id);-->
+    <delete id="deleteWork">
+        delete from t_sensitive_work where id = #{id}
+    </delete>
 </mapper>

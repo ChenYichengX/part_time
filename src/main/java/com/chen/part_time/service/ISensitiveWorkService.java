@@ -25,6 +25,21 @@ public interface ISensitiveWorkService {
      * @Date 2021/4/15 15:32
      */
     List<SensitiveWork> getList(SensitiveWork sensitiveWork);
-    
+
+
+    /**
+     * @Author ChenYicheng
+     * @Description 判断是否有重复
+     * @Date 2021/4/15 15:32
+     */
+    Integer getCountByWork(String work);
+
+
+    /**
+     * @Author ChenYicheng
+     * @Description 删除敏感词
+     * @Date 2021/4/16 11:54
+     */
+    boolean deleteWork(Long id);
     
 }
