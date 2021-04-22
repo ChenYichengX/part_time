@@ -43,19 +43,19 @@ public class ValidatePartTimeUtil {
         for (SensitiveWork sensitiveWork : list) {
             String work = sensitiveWork.getWork();
             // 1.比对标题
-            if (title.equals(work)) {
+            if (title.indexOf(work) != -1) {
                 return "标题包含敏感词";
             }
             // 2.比对内容
-            if (content.equals(work)) {
+            if (content.indexOf(work)!= -1) {
                 return "内容包含敏感词";
             }
             // 3.比对要求
-            if (require_text.equals(work)) {
+            if (require_text.indexOf(work) != -1) {
                 return "要求包含敏感词";
             }
             // 4.比对待遇
-            if (treatment.equals(work)) {
+            if (treatment.indexOf(work) != -1) {
                 return "待遇包含敏感词";
             }
         }
