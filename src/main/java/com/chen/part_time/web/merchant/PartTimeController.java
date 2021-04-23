@@ -264,7 +264,7 @@ public class PartTimeController {
         }
         PartTimeCondition partTimeCondition = new PartTimeCondition();
         partTimeCondition.setUser_id(merchant.getId());
-        List<MerchantPartTime> allPartTime = partTimeService.getAllPartTime(partTimeCondition);
+        List<MerchantPartTime> allPartTime = partTimeService.getAllPartTime(partTimeCondition); // 通过 商家id 获取该商家的兼职信息
         for (MerchantPartTime merchantPartTime : allPartTime) {
             if (merchantPartTime.getId().equals(id)) {
                 // 获取所有申请人的信息

@@ -36,10 +36,10 @@ public class ValidatePartTimeUtil {
     public static String validatePartTime(PartTime partTime) {
         // 0.获取所有敏感词
         List<SensitiveWork> list = sensitiveWorkService.getList(null);
-        String title = partTime.getTitle();
-        String content = partTime.getContent();
-        String require_text = partTime.getRequire_text();
-        String treatment = partTime.getTreatment();
+        String title = partTime.getTitle() != null ? partTime.getTitle() : "";
+        String content = partTime.getContent() != null ? partTime.getContent() : "";
+        String require_text = partTime.getRequire_text() != null ? partTime.getRequire_text() : "";
+        String treatment = partTime.getTreatment() != null ? partTime.getTreatment() : "";
         for (SensitiveWork sensitiveWork : list) {
             String work = sensitiveWork.getWork();
             // 1.比对标题
