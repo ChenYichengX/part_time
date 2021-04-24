@@ -154,7 +154,6 @@ public class PartTimeController {
      * @param unit
      * @param file
      * @param session
-     * @param request
      * @param attributes
      * @return
      */
@@ -163,7 +162,6 @@ public class PartTimeController {
                               String price, int unit,
                               @RequestParam(value = "file", required = false) MultipartFile file,
                               HttpSession session,
-                              HttpServletRequest request,
                               RedirectAttributes attributes,
                               Model model) {
         String priceStr = "";
@@ -183,8 +181,14 @@ public class PartTimeController {
         // 审核兼职信息
         String s = ValidatePartTimeUtil.validatePartTime(partTime);
         if(!s.equals("审核通过")){ // 审核不通过
-            model.addAttribute("message", s);
-            model.addAttribute("partTime", partTime);
+            model.addAttribute("message", s); // 提示信息
+            model.addAttribute("partTime", partTime); // 兼职信息
+            model.addAttribute("units", unitService.getAllUnit()); // 获取所有价格单位
+            model.addAttribute("types", typeService.getAllType()); // 获取所有类型
+            model.addAttribute("payments", paymentTypeService.getAllPaymentType()); // 获取所有支付类型
+            String[] split = partTime.getPrice().split("元/");
+            model.addAttribute("price", split[0]);
+            model.addAttribute("unitStr", split[1]);
             return "merchant/partTime-input";
         }
         if (partTime.getId() != null) { // 表示是修改
