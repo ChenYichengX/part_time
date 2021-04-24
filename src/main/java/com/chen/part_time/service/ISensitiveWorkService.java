@@ -18,6 +18,14 @@ public interface ISensitiveWorkService {
      * @Date 2021/4/15 15:26
      */
     boolean addSensitiveWork(SensitiveWork sensitiveWork);
+
+
+    /**
+     * @Author ChenYicheng
+     * @Description 批量插入
+     * @Date 2021/4/24 16:54
+     */
+    int addSensitiveWorkByLists(List<SensitiveWork> sensitiveWorkList);
     
     /**
      * @Author ChenYicheng

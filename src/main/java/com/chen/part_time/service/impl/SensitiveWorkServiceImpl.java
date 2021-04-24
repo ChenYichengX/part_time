@@ -26,6 +26,11 @@ public class SensitiveWorkServiceImpl implements ISensitiveWorkService {
     }
 
     @Override
+    public int addSensitiveWorkByLists(List<SensitiveWork> sensitiveWorkList) {
+        return sensitiveWorkDao.addSensitiveWorkByLists(sensitiveWorkList);
+    }
+
+    @Override
     public List<SensitiveWork> getList(SensitiveWork sensitiveWork) {
         return sensitiveWorkDao.getList(sensitiveWork);
     }

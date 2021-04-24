@@ -41,4 +41,12 @@ public interface ISensitiveWorkDao {
      * @Date 2021/4/16 11:54
      */
     boolean deleteWork(Long id);
+
+
+    /**
+     * @Author ChenYicheng
+     * @Description 批量插入
+     * @Date 2021/4/24 16:53
+     */
+    int addSensitiveWorkByLists(List<SensitiveWork> sensitiveWorkList);
 }

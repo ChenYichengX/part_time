@@ -34,4 +34,13 @@
     <delete id="deleteWork">
         delete from t_sensitive_work where id = #{id}
     </delete>
+
+    <!--    int addSensitiveWorkByLists(List<SensitiveWork> sensitiveWorkList);-->
+    <insert id="addSensitiveWorkByLists">
+        insert into t_sensitive_work(`work`)
+        values
+        <foreach collection="sensitiveWorkList" item="sensitiveWork" index="index" separator=",">
+            (#{sensitiveWork.work})
+        </foreach>
+    </insert>
 </mapper>

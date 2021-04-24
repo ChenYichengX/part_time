@@ -1,11 +1,17 @@
 package com.chen.part_time;
 
 import com.chen.part_time.entity.PartTime;
+import com.chen.part_time.entity.SensitiveWork;
+import com.chen.part_time.service.ISensitiveWorkService;
 import com.chen.part_time.util.ValidatePartTimeUtil;
 import com.chen.part_time.web.merchant.PartTimeController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 class PartTimeApplicationTests {
@@ -72,8 +78,54 @@ class PartTimeApplicationTests {
      */
     @Test
     void testDeletePartTime(){
-        partTimeController.deleteFile();
+        // partTimeController.deleteFile();
     }
 
+    @Autowired
+    private ISensitiveWorkService sensitiveWorkService;
+
+
+    /**
+     * @Author ChenYicheng
+     * @Description 读取 txt 文本，将敏感词以，分割插入数据库中
+     * @Date 2021/4/24 16:47
+     */
+    @Test
+    void readFileInsertIntoTable(){
+
+        Reader reader = null;
+        // 1.读取 txt 文本
+        try {
+            reader = new FileReader("D://a.txt");
+            int len = 0;
+            char[] chars = new char[1024];
+            StringBuilder builder = new StringBuilder();
+            while((len = reader.read(chars))!= -1){
+                builder.append(chars);
+            }
+            String s = builder.toString();
+            String[] split = s.split(",");
+            // 2.存入 list
+            List<SensitiveWork> list = new ArrayList<>();
+            for (String s1 : split) {
+                list.add(new SensitiveWork(s1));
+            }
+            // 3.执行批量插入
+            int i = sensitiveWorkService.addSensitiveWorkByLists(list);
+            System.out.println(i);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(reader != null){
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
 }
